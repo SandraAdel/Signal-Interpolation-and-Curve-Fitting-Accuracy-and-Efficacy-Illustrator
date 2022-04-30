@@ -169,7 +169,7 @@ class Ui_MainWindow(object):
         self.actionOpen.setText(_translate("MainWindow", "Open"))
         self.actionOpen.setShortcut(_translate("MainWindow", "Ctrl+O"))
 from pyqtgraph import PlotWidget
-import images_rc
+
 
 
 if __name__ == "__main__":
