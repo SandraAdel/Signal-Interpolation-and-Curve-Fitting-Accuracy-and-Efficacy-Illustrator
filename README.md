@@ -4,7 +4,5 @@
 # Demo
 
 # Team Members
-Farah Gamal /n
-Ro'aa Ehab
-Hoda Saeed
-Sandra Adel
+Farah Gamal                                                                                                                                                              Ro'aa Ehab                                                                                                                                                                Hoda Saeed                                                                                                                                                                Sandra Adel
+
