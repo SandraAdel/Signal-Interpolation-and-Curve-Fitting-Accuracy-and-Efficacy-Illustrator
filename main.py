@@ -15,11 +15,19 @@ class MainWindow(QMainWindow):
         self.ui.setupUi(self)
 
         # Variables Initialization
+        # Hide error map elements
         self.ui.errorMapGraphicsView.hide()
         self.ui.errorLabel.hide()
         self.ui.errorMapProgressBar.hide()
-
-
+        # Hide polynomial controls 
+        self.ui.polynomialFitPushButton.hide()
+        self.ui.polynomialFittingOrderLabel.hide()
+        self.ui.polynomialFittingOrderSpinBox.hide()
+        self.ui.polynomialNumberOfChuncksLabel.hide()
+        self.ui.polynomialNumberOfChuncksSpinBox.hide()
+        self.ui.polynomialOerlapSpinBox.hide()
+        self.ui.polynomialOverlapLabel.hide()
+        
         # Links of GUI Elements to Methods:
 
     # Methods
