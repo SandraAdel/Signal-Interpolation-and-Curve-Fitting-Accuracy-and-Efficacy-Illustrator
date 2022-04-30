@@ -15,12 +15,14 @@ class MainWindow(QMainWindow):
         self.ui.setupUi(self)
 
         # Variables Initialization
-        
+        self.ui.errorMapGraphicsView.hide()
+        self.ui.errorLabel.hide()
+        self.ui.errorMapProgressBar.hide()
+
 
         # Links of GUI Elements to Methods:
 
     # Methods
-
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
