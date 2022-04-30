@@ -27,6 +27,8 @@ class MainWindow(QMainWindow):
         self.ui.polynomialNumberOfChuncksSpinBox.hide()
         self.ui.polynomialOerlapSpinBox.hide()
         self.ui.polynomialOverlapLabel.hide()
+        self.ui.polynomialOneChunckRadioButton.hide()
+        self.ui.polynomialMultipleChuncksRadioButton.hide()
         
         # Links of GUI Elements to Methods:
 

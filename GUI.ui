@@ -76,7 +76,7 @@
       <x>11</x>
       <y>501</y>
       <width>661</width>
-      <height>251</height>
+      <height>291</height>
      </rect>
     </property>
     <property name="title">
@@ -88,10 +88,24 @@
        <x>10</x>
        <y>30</y>
        <width>421</width>
-       <height>201</height>
+       <height>242</height>
       </rect>
      </property>
      <layout class="QGridLayout" name="mainGraphControlsGridLayout">
+      <item row="8" column="2">
+       <widget class="QPushButton" name="polynomialFitPushButton">
+        <property name="text">
+         <string>Fit</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="2">
+       <widget class="QRadioButton" name="polynomialOneChunckRadioButton">
+        <property name="text">
+         <string>One Chunck</string>
+        </property>
+       </widget>
+      </item>
       <item row="0" column="1">
        <widget class="QComboBox" name="interpolationMethodComboBox">
         <item>
@@ -106,36 +120,6 @@
         </item>
        </widget>
       </item>
-      <item row="3" column="2">
-       <widget class="QSpinBox" name="polynomialFittingOrderSpinBox"/>
-      </item>
-      <item row="5" column="2">
-       <widget class="QSpinBox" name="polynomialOerlapSpinBox"/>
-      </item>
-      <item row="0" column="2">
-       <widget class="QLabel" name="polynomialNumberOfChuncksLabel">
-        <property name="text">
-         <string>Number of chuncks</string>
-        </property>
-       </widget>
-      </item>
-      <item row="4" column="2">
-       <widget class="QLabel" name="polynomialOverlapLabel">
-        <property name="text">
-         <string>overlap</string>
-        </property>
-       </widget>
-      </item>
-      <item row="2" column="2">
-       <widget class="QLabel" name="polynomialFittingOrderLabel">
-        <property name="text">
-         <string>Fitting order</string>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="2">
-       <widget class="QSpinBox" name="polynomialNumberOfChuncksSpinBox"/>
-      </item>
       <item row="0" column="0">
        <widget class="QLabel" name="intetpolationMethodLabel">
         <property name="text">
@@ -146,10 +130,40 @@
         </property>
        </widget>
       </item>
-      <item row="6" column="2">
-       <widget class="QPushButton" name="polynomialFitPushButton">
+      <item row="5" column="2">
+       <widget class="QSpinBox" name="polynomialFittingOrderSpinBox"/>
+      </item>
+      <item row="7" column="2">
+       <widget class="QSpinBox" name="polynomialOerlapSpinBox"/>
+      </item>
+      <item row="2" column="2">
+       <widget class="QLabel" name="polynomialNumberOfChuncksLabel">
         <property name="text">
-         <string>Fit</string>
+         <string>Number of chuncks</string>
+        </property>
+       </widget>
+      </item>
+      <item row="6" column="2">
+       <widget class="QLabel" name="polynomialOverlapLabel">
+        <property name="text">
+         <string>overlap</string>
+        </property>
+       </widget>
+      </item>
+      <item row="4" column="2">
+       <widget class="QLabel" name="polynomialFittingOrderLabel">
+        <property name="text">
+         <string>Fitting order</string>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="2">
+       <widget class="QSpinBox" name="polynomialNumberOfChuncksSpinBox"/>
+      </item>
+      <item row="1" column="2">
+       <widget class="QRadioButton" name="polynomialMultipleChuncksRadioButton">
+        <property name="text">
+         <string>Multiple Chuncks</string>
         </property>
        </widget>
       </item>
