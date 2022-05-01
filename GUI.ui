@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>1354</width>
-    <height>857</height>
+    <height>882</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -76,104 +76,10 @@
       <x>11</x>
       <y>501</y>
       <width>1341</width>
-      <height>291</height>
+      <height>321</height>
      </rect>
     </property>
     <layout class="QGridLayout" name="gridLayout">
-     <item row="0" column="0">
-      <widget class="QGroupBox" name="mainGraphControlsGroupBox">
-       <property name="title">
-        <string>Main Graph Controls</string>
-       </property>
-       <widget class="QWidget" name="layoutWidget">
-        <property name="geometry">
-         <rect>
-          <x>10</x>
-          <y>30</y>
-          <width>421</width>
-          <height>246</height>
-         </rect>
-        </property>
-        <layout class="QGridLayout" name="mainGraphControlsGridLayout">
-         <item row="2" column="2">
-          <widget class="QRadioButton" name="polynomialOneChunkRadioButton">
-           <property name="text">
-            <string>One Chunk</string>
-           </property>
-          </widget>
-         </item>
-         <item row="3" column="2">
-          <widget class="QRadioButton" name="polynomialMultipleChunksRadioButton">
-           <property name="text">
-            <string>Multiple Chunks</string>
-           </property>
-          </widget>
-         </item>
-         <item row="0" column="0">
-          <widget class="QLabel" name="intetpolationMethodLabel">
-           <property name="text">
-            <string>Interpolation Method</string>
-           </property>
-           <property name="alignment">
-            <set>Qt::AlignCenter</set>
-           </property>
-          </widget>
-         </item>
-         <item row="0" column="1">
-          <widget class="QComboBox" name="interpolationMethodComboBox">
-           <item>
-            <property name="text">
-             <string>Polynomial</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>Cubic</string>
-            </property>
-           </item>
-          </widget>
-         </item>
-         <item row="1" column="2">
-          <widget class="QSpinBox" name="polynomialFittingOrderSpinBox"/>
-         </item>
-         <item row="0" column="2">
-          <widget class="QLabel" name="polynomialFittingOrderLabel">
-           <property name="text">
-            <string>Fitting order</string>
-           </property>
-          </widget>
-         </item>
-         <item row="10" column="2">
-          <widget class="QPushButton" name="polynomialFitPushButton">
-           <property name="text">
-            <string>Fit</string>
-           </property>
-          </widget>
-         </item>
-         <item row="5" column="2">
-          <widget class="QSpinBox" name="polynomialNumberOfChunksSpinBox"/>
-         </item>
-         <item row="9" column="2">
-          <widget class="QSpinBox" name="polynomialOerlapSpinBox"/>
-         </item>
-         <item row="4" column="2">
-          <widget class="QLabel" name="polynomialNumberOfChunksLabel">
-           <property name="text">
-            <string>Number of chunks</string>
-           </property>
-          </widget>
-         </item>
-         <item row="8" column="2">
-          <widget class="QLabel" name="polynomialOverlapLabel">
-           <property name="text">
-            <string>overlap</string>
-           </property>
-          </widget>
-         </item>
-        </layout>
-       </widget>
-      </widget>
-     </item>
      <item row="0" column="1">
       <widget class="QGroupBox" name="errorMapControlsGroupBox">
        <property name="title">
@@ -211,26 +117,10 @@
           <x>10</x>
           <y>20</y>
           <width>641</width>
-          <height>80</height>
+          <height>99</height>
          </rect>
         </property>
         <layout class="QGridLayout" name="xAxisAndYAxisGridLayout">
-         <item row="0" column="3">
-          <spacer name="xAxisHorizontalSpacer">
-           <property name="orientation">
-            <enum>Qt::Horizontal</enum>
-           </property>
-           <property name="sizeType">
-            <enum>QSizePolicy::Fixed</enum>
-           </property>
-           <property name="sizeHint" stdset="0">
-            <size>
-             <width>120</width>
-             <height>20</height>
-            </size>
-           </property>
-          </spacer>
-         </item>
          <item row="0" column="0">
           <widget class="QLabel" name="xAxisLabel">
            <property name="text">
@@ -270,6 +160,22 @@
            </property>
           </widget>
          </item>
+         <item row="0" column="3">
+          <spacer name="xAxisHorizontalSpacer">
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="sizeType">
+            <enum>QSizePolicy::Fixed</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>120</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
          <item row="1" column="2">
           <widget class="QComboBox" name="yAxisComboBox">
            <item>
@@ -298,6 +204,123 @@
             <set>Qt::AlignCenter</set>
            </property>
           </widget>
+         </item>
+        </layout>
+       </widget>
+      </widget>
+     </item>
+     <item row="0" column="0">
+      <widget class="QGroupBox" name="mainGraphControlsGroupBox">
+       <property name="title">
+        <string>Main Graph Controls</string>
+       </property>
+       <widget class="QWidget" name="layoutWidget">
+        <property name="geometry">
+         <rect>
+          <x>20</x>
+          <y>30</y>
+          <width>621</width>
+          <height>281</height>
+         </rect>
+        </property>
+        <layout class="QGridLayout" name="mainGraphControlsGridLayout">
+         <item row="0" column="0">
+          <widget class="QRadioButton" name="bicubicRadioButton">
+           <property name="text">
+            <string>Bicubic</string>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="1">
+          <widget class="QRadioButton" name="cubicSplineRadioButton">
+           <property name="text">
+            <string>Cubic Spline</string>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="3">
+          <widget class="QRadioButton" name="polynomialRadioButton">
+           <property name="text">
+            <string>Polynomial</string>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="1">
+          <widget class="QLabel" name="cubicSplineFittingOrderLabel">
+           <property name="text">
+            <string>Fitting order</string>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="3">
+          <widget class="QLabel" name="polynomialFittingOrderLabel">
+           <property name="text">
+            <string>Fitting order</string>
+           </property>
+          </widget>
+         </item>
+         <item row="9" column="3">
+          <widget class="QLabel" name="polynomialOverlapLabel">
+           <property name="text">
+            <string>overlap</string>
+           </property>
+          </widget>
+         </item>
+         <item row="10" column="3">
+          <widget class="QSpinBox" name="polynomialOerlapSpinBox"/>
+         </item>
+         <item row="11" column="3">
+          <widget class="QPushButton" name="polynomialFitPushButton">
+           <property name="text">
+            <string>Fit</string>
+           </property>
+          </widget>
+         </item>
+         <item row="4" column="3">
+          <widget class="QRadioButton" name="polynomialMultipleChunksRadioButton">
+           <property name="text">
+            <string>Multiple Chunks</string>
+           </property>
+          </widget>
+         </item>
+         <item row="2" column="1">
+          <widget class="QSpinBox" name="cubicSplineFittingOrderSpinBox"/>
+         </item>
+         <item row="3" column="3">
+          <widget class="QRadioButton" name="polynomialOneChunkRadioButton">
+           <property name="text">
+            <string>One Chunk</string>
+           </property>
+          </widget>
+         </item>
+         <item row="5" column="3">
+          <widget class="QLabel" name="polynomialNumberOfChunksLabel">
+           <property name="text">
+            <string>Number of chunks</string>
+           </property>
+          </widget>
+         </item>
+         <item row="2" column="3">
+          <widget class="QSpinBox" name="polynomialFittingOrderSpinBox"/>
+         </item>
+         <item row="6" column="3">
+          <widget class="QSpinBox" name="polynomialNumberOfChunksSpinBox"/>
+         </item>
+         <item row="0" column="2">
+          <spacer name="horizontalSpacer">
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="sizeType">
+            <enum>QSizePolicy::Fixed</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>40</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
          </item>
         </layout>
        </widget>

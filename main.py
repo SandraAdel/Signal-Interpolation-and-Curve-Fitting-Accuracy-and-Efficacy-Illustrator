@@ -43,14 +43,18 @@ class MainWindow(QMainWindow):
         self.ui.polynomialOverlapLabel.hide()
         self.ui.polynomialOneChunkRadioButton.hide()
         self.ui.polynomialMultipleChunksRadioButton.hide()
+
+        self.ui.cubicSplineFittingOrderLabel.hide()
+        self.ui.cubicSplineFittingOrderSpinBox.hide()
         
         # Links of GUI Elements to Methods:
         self.ui.openAction.triggered.connect(lambda: self.OpenFile())
-        self.ui.interpolationMethodComboBox.currentIndexChanged.connect(lambda: self.interpolatioMethodes(self.ui.interpolationMethodComboBox.currentIndex()))
         self.ui.polynomialMultipleChunksRadioButton.toggled.connect(lambda: self.radioButtonMultiple())
         self.ui.polynomialOneChunkRadioButton.toggled.connect(lambda: self.radioButton())
+        self.ui.polynomialRadioButton.toggled.connect(lambda: self.polynomial())
+        self.ui.cubicSplineRadioButton.toggled.connect(lambda: self.cubicSpline())
+        self.ui.bicubicRadioButton.toggled.connect(lambda: self.bicubic())
         self.ui.polynomialFitPushButton.clicked.connect(lambda: self.interpolation())
-
 
     # Methods
     def OpenFile(self):
@@ -59,14 +63,6 @@ class MainWindow(QMainWindow):
         self.TimeReadings = self.data_frame.iloc[:,0].to_numpy()
         self.AmplitudeReadings = self.data_frame.iloc[:,1].to_numpy()
         self.ui.mainGraphGraphicsView.plot(self.TimeReadings, self.AmplitudeReadings, pen=pyqtgraph.mkPen('b', width=1.5))
-    
-    def interpolatioMethodes(self, index):
-        if index == 0:
-            self.ui.polynomialOneChunkRadioButton.show()
-            self.ui.polynomialMultipleChunksRadioButton.show()
-            self.ui.polynomialFitPushButton.show()
-            self.ui.polynomialFittingOrderLabel.show()
-            self.ui.polynomialFittingOrderSpinBox.show()
             
     #! COODE REPETITION TACK CAAAAAAAAAAAAAAARE        
     def radioButtonMultiple (self):
@@ -85,8 +81,47 @@ class MainWindow(QMainWindow):
             self.ui.polynomialOerlapSpinBox.hide()
             self.ui.polynomialOverlapLabel.hide()
 
+    def polynomial(self):
+        if self.ui.polynomialRadioButton.isChecked():
+            self.ui.polynomialOneChunkRadioButton.show()
+            self.ui.polynomialMultipleChunksRadioButton.show()
+            self.ui.polynomialFitPushButton.show()
+            self.ui.polynomialFittingOrderLabel.show()
+            self.ui.polynomialFittingOrderSpinBox.show()
 
+            self.ui.cubicSplineFittingOrderLabel.hide()
+            self.ui.cubicSplineFittingOrderSpinBox.hide()
+    
+    def cubicSpline(self):
+        if self.ui.cubicSplineRadioButton.isChecked():
+            self.ui.cubicSplineFittingOrderLabel.show()
+            self.ui.cubicSplineFittingOrderSpinBox.show()
 
+            self.ui.polynomialOneChunkRadioButton.hide()
+            self.ui.polynomialMultipleChunksRadioButton.hide()
+            self.ui.polynomialFitPushButton.hide()
+            self.ui.polynomialFittingOrderLabel.hide()
+            self.ui.polynomialFittingOrderSpinBox.hide()
+            self.ui.polynomialNumberOfChunksLabel.hide()
+            self.ui.polynomialNumberOfChunksSpinBox.hide()
+            self.ui.polynomialOerlapSpinBox.hide()
+            self.ui.polynomialOverlapLabel.hide()
+
+    def bicubic(self):
+        if self.ui.bicubicRadioButton.isChecked():
+            self.ui.cubicSplineFittingOrderLabel.hide()
+            self.ui.cubicSplineFittingOrderSpinBox.hide()
+
+            self.ui.polynomialOneChunkRadioButton.hide()
+            self.ui.polynomialMultipleChunksRadioButton.hide()
+            self.ui.polynomialFitPushButton.hide()
+            self.ui.polynomialFittingOrderLabel.hide()
+            self.ui.polynomialFittingOrderSpinBox.hide()
+            self.ui.polynomialNumberOfChunksLabel.hide()
+            self.ui.polynomialNumberOfChunksSpinBox.hide()
+            self.ui.polynomialOerlapSpinBox.hide()
+            self.ui.polynomialOverlapLabel.hide()
+################################################################################
     def interpolation (self):
         self.chunckSize = ceil(1000/self.ui.polynomialNumberOfChunksSpinBox.value())
         print(self.chunckSize)
