@@ -70,7 +70,7 @@
      </item>
     </layout>
    </widget>
-   <widget class="QWidget" name="">
+   <widget class="QWidget" name="layoutWidget">
     <property name="geometry">
      <rect>
       <x>11</x>
@@ -85,7 +85,7 @@
        <property name="title">
         <string>Main Graph Controls</string>
        </property>
-       <widget class="QWidget" name="">
+       <widget class="QWidget" name="layoutWidget">
         <property name="geometry">
          <rect>
           <x>10</x>
@@ -96,16 +96,16 @@
         </property>
         <layout class="QGridLayout" name="mainGraphControlsGridLayout">
          <item row="2" column="2">
-          <widget class="QRadioButton" name="polynomialOneChunckRadioButton">
+          <widget class="QRadioButton" name="polynomialOneChunkRadioButton">
            <property name="text">
-            <string>One Chunck</string>
+            <string>One Chunk</string>
            </property>
           </widget>
          </item>
          <item row="3" column="2">
-          <widget class="QRadioButton" name="polynomialMultipleChuncksRadioButton">
+          <widget class="QRadioButton" name="polynomialMultipleChunksRadioButton">
            <property name="text">
-            <string>Multiple Chuncks</string>
+            <string>Multiple Chunks</string>
            </property>
           </widget>
          </item>
@@ -151,15 +151,15 @@
           </widget>
          </item>
          <item row="5" column="2">
-          <widget class="QSpinBox" name="polynomialNumberOfChuncksSpinBox"/>
+          <widget class="QSpinBox" name="polynomialNumberOfChunksSpinBox"/>
          </item>
          <item row="9" column="2">
           <widget class="QSpinBox" name="polynomialOerlapSpinBox"/>
          </item>
          <item row="4" column="2">
-          <widget class="QLabel" name="polynomialNumberOfChuncksLabel">
+          <widget class="QLabel" name="polynomialNumberOfChunksLabel">
            <property name="text">
-            <string>Number of chuncks</string>
+            <string>Number of chunks</string>
            </property>
           </widget>
          </item>
@@ -205,7 +205,7 @@
          <number>24</number>
         </property>
        </widget>
-       <widget class="QWidget" name="">
+       <widget class="QWidget" name="layoutWidget">
         <property name="geometry">
          <rect>
           <x>10</x>
@@ -250,7 +250,7 @@
            </item>
            <item>
             <property name="text">
-             <string>Number of chuncks</string>
+             <string>Number of chunks</string>
             </property>
            </item>
            <item>
@@ -279,7 +279,7 @@
            </item>
            <item>
             <property name="text">
-             <string>Number of chuncks</string>
+             <string>Number of chunks</string>
             </property>
            </item>
            <item>
