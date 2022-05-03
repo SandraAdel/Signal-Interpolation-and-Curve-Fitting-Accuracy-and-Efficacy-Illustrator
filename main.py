@@ -55,6 +55,8 @@ class MainWindow(QMainWindow):
         self.ui.cubicSplineRadioButton.toggled.connect(lambda: self.cubicSpline())
         self.ui.bicubicRadioButton.toggled.connect(lambda: self.bicubic())
         self.ui.polynomialFitPushButton.clicked.connect(lambda: self.interpolation())
+        self.ui.extrapolationHorizontalSlider.valueChanged.connect(lambda: self.extrapolation())
+
 
     # Methods
     def OpenFile(self):
@@ -109,6 +111,7 @@ class MainWindow(QMainWindow):
 
     def bicubic(self):
         if self.ui.bicubicRadioButton.isChecked():
+            
             self.ui.cubicSplineFittingOrderLabel.hide()
             self.ui.cubicSplineFittingOrderSpinBox.hide()
 
@@ -121,7 +124,7 @@ class MainWindow(QMainWindow):
             self.ui.polynomialNumberOfChunksSpinBox.hide()
             self.ui.polynomialOerlapSpinBox.hide()
             self.ui.polynomialOverlapLabel.hide()
-################################################################################
+    #!################################################################################
     def interpolation (self):
         self.chunckSize = ceil(1000/self.ui.polynomialNumberOfChunksSpinBox.value())
         print(self.chunckSize)
@@ -143,7 +146,12 @@ class MainWindow(QMainWindow):
             self.ui.mainGraphGraphicsView.plot(self.TimeReadings, self.AmplitudeReadings, pen=pyqtgraph.mkPen('b', width=1.5))
             self.ui.mainGraphGraphicsView.plot(time, self.poly1d_fn(time), pen=pyqtgraph.mkPen('g', width=1.5, style = QtCore.Qt.DotLine))
 
-    
+    def extrapolation(self):
+        self.extrapolationSliderValue = self.ui.extrapolationHorizontalSlider.value()
+        self.ui.extrapolationPercentageLabel.setText(f'{self.extrapolationSliderValue}% Original Signal')
+
+   
+
 if __name__ == '__main__':
     app = QApplication(sys.argv)
     win = MainWindow()
