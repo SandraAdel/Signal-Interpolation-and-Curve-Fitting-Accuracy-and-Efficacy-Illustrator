@@ -10,31 +10,6 @@
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 
-class Slider(QtWidgets.QSlider):
-    def mousePressEvent(self, event):
-        super(Slider, self).mousePressEvent(event)
-        if event.button() == QtCore.Qt.LeftButton:
-            val = self.pixelPosToRangeValue(event.pos())
-            self.setValue(val)
-
-    def pixelPosToRangeValue(self, pos):
-        opt = QtWidgets.QStyleOptionSlider()
-        self.initStyleOption(opt)
-        gr = self.style().subControlRect(QtWidgets.QStyle.CC_Slider, opt, QtWidgets.QStyle.SC_SliderGroove, self)
-        sr = self.style().subControlRect(QtWidgets.QStyle.CC_Slider, opt, QtWidgets.QStyle.SC_SliderHandle, self)
-
-        if self.orientation() == QtCore.Qt.Horizontal:
-            sliderLength = sr.width()
-            sliderMin = gr.x()
-            sliderMax = gr.right() - sliderLength + 1
-        else:
-            sliderLength = sr.height()
-            sliderMin = gr.y()
-            sliderMax = gr.bottom() - sliderLength + 1;
-        pr = pos - sr.center() + sr.topLeft()
-        p = pr.x() if self.orientation() == QtCore.Qt.Horizontal else pr.y()
-        return QtWidgets.QStyle.sliderValueFromPosition(self.minimum(), self.maximum(), p - sliderMin,
-                                               sliderMax - sliderMin, opt.upsideDown)
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
@@ -86,7 +61,7 @@ class Ui_MainWindow(object):
         self.errorMapProgressBar.setProperty("value", 24)
         self.errorMapProgressBar.setObjectName("errorMapProgressBar")
         self.layoutWidget = QtWidgets.QWidget(self.errorMapControlsGroupBox)
-        self.layoutWidget.setGeometry(QtCore.QRect(60, 30, 491, 111))
+        self.layoutWidget.setGeometry(QtCore.QRect(60, 30, 491, 117))
         self.layoutWidget.setObjectName("layoutWidget")
         self.xAxisAndYAxisGridLayout = QtWidgets.QGridLayout(self.layoutWidget)
         self.xAxisAndYAxisGridLayout.setContentsMargins(0, 0, 0, 0)
@@ -104,10 +79,10 @@ class Ui_MainWindow(object):
         self.yAxisLabel.setAlignment(QtCore.Qt.AlignCenter)
         self.yAxisLabel.setObjectName("yAxisLabel")
         self.xAxisAndYAxisGridLayout.addWidget(self.yAxisLabel, 1, 0, 1, 1)
-        self.label = QtWidgets.QLabel(self.layoutWidget)
-        self.label.setAlignment(QtCore.Qt.AlignCenter)
-        self.label.setObjectName("label")
-        self.xAxisAndYAxisGridLayout.addWidget(self.label, 2, 0, 1, 1)
+        self.constantParameterLabel = QtWidgets.QLabel(self.layoutWidget)
+        self.constantParameterLabel.setAlignment(QtCore.Qt.AlignCenter)
+        self.constantParameterLabel.setObjectName("constantParameterLabel")
+        self.xAxisAndYAxisGridLayout.addWidget(self.constantParameterLabel, 2, 0, 1, 1)
         self.yAxisComboBox = QtWidgets.QComboBox(self.layoutWidget)
         self.yAxisComboBox.setObjectName("yAxisComboBox")
         self.yAxisComboBox.addItem("")
@@ -121,6 +96,9 @@ class Ui_MainWindow(object):
         self.pauseAndRezoomErrorMapPushButton = QtWidgets.QPushButton(self.layoutWidget)
         self.pauseAndRezoomErrorMapPushButton.setObjectName("pauseAndRezoomErrorMapPushButton")
         self.xAxisAndYAxisGridLayout.addWidget(self.pauseAndRezoomErrorMapPushButton, 3, 2, 1, 1)
+        self.constantParameterSpinBox = QtWidgets.QSpinBox(self.layoutWidget)
+        self.constantParameterSpinBox.setObjectName("constantParameterSpinBox")
+        self.xAxisAndYAxisGridLayout.addWidget(self.constantParameterSpinBox, 2, 2, 1, 1)
         self.gridLayout.addWidget(self.errorMapControlsGroupBox, 0, 3, 1, 1)
         self.mainGraphControlsGroupBox = QtWidgets.QGroupBox(self.centralwidget)
         self.mainGraphControlsGroupBox.setObjectName("mainGraphControlsGroupBox")
@@ -134,7 +112,7 @@ class Ui_MainWindow(object):
         self.extrapolationLabel.setAlignment(QtCore.Qt.AlignCenter)
         self.extrapolationLabel.setObjectName("extrapolationLabel")
         self.gridLayout_2.addWidget(self.extrapolationLabel, 0, 0, 1, 1)
-        self.extrapolationHorizontalSlider = Slider(self.widget)
+        self.extrapolationHorizontalSlider = QtWidgets.QSlider(self.widget)
         self.extrapolationHorizontalSlider.setMaximum(100)
         self.extrapolationHorizontalSlider.setOrientation(QtCore.Qt.Horizontal)
         self.extrapolationHorizontalSlider.setObjectName("extrapolationHorizontalSlider")
@@ -336,7 +314,7 @@ class Ui_MainWindow(object):
         self.xAxisComboBox.setItemText(0, _translate("MainWindow", "Order of polynomial"))
         self.xAxisComboBox.setItemText(1, _translate("MainWindow", "Overlapping"))
         self.yAxisLabel.setText(_translate("MainWindow", "Y-axis"))
-        self.label.setText(_translate("MainWindow", "ZO3BAAAR"))
+        self.constantParameterLabel.setText(_translate("MainWindow", "Constant Parameter"))
         self.yAxisComboBox.setItemText(0, _translate("MainWindow", "Number of chunks"))
         self.yAxisComboBox.setItemText(1, _translate("MainWindow", "Overlapping"))
         self.startAndCancelErrorMapPushButton.setText(_translate("MainWindow", "Start"))
@@ -382,7 +360,6 @@ class Ui_MainWindow(object):
         self.openAction.setText(_translate("MainWindow", "Open"))
         self.openAction.setShortcut(_translate("MainWindow", "Ctrl+O"))
 from pyqtgraph import PlotWidget
-
 
 
 if __name__ == "__main__":
