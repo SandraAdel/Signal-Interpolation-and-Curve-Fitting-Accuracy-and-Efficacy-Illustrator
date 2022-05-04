@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1382</width>
-    <height>967</height>
+    <width>1470</width>
+    <height>1000</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -17,6 +17,24 @@
    <layout class="QVBoxLayout" name="verticalLayout">
     <item>
      <layout class="QGridLayout" name="mainGraphAndErrorMapGridLayout">
+      <item row="1" column="2">
+       <layout class="QGridLayout" name="errorMapGridLayout">
+        <item row="0" column="0">
+         <widget class="PlotWidget" name="errorMapGraphicsView">
+          <property name="styleSheet">
+           <string notr="true">background-color: rgb(0, 0, 0);</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+      <item row="0" column="0">
+       <widget class="QLabel" name="latexEquationLabel">
+        <property name="text">
+         <string>Latex equation</string>
+        </property>
+       </widget>
+      </item>
       <item row="2" column="0">
        <spacer name="mainGraphHorizontalSpacer">
         <property name="orientation">
@@ -32,27 +50,6 @@
          </size>
         </property>
        </spacer>
-      </item>
-      <item row="0" column="0">
-       <widget class="QLabel" name="latexEquationLabel">
-        <property name="text">
-         <string>Latex equation</string>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="0">
-       <widget class="PlotWidget" name="mainGraphGraphicsView">
-        <property name="styleSheet">
-         <string notr="true">background-color: rgb(0, 0, 0);</string>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="2">
-       <widget class="QLabel" name="errorLabel">
-        <property name="text">
-         <string>Error map</string>
-        </property>
-       </widget>
       </item>
       <item row="1" column="1">
        <spacer name="verticalSpacer_2">
@@ -70,37 +67,24 @@
         </property>
        </spacer>
       </item>
-      <item row="1" column="2">
-       <layout class="QGridLayout" name="errorMapGridLayout">
-        <item row="0" column="0">
-         <widget class="PlotWidget" name="errorMapGraphicsView">
-          <property name="styleSheet">
-           <string notr="true">background-color: rgb(0, 0, 0);</string>
-          </property>
-         </widget>
-        </item>
-       </layout>
+      <item row="0" column="2">
+       <widget class="QLabel" name="errorLabel">
+        <property name="text">
+         <string>Error map</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="0">
+       <widget class="PlotWidget" name="mainGraphGraphicsView">
+        <property name="styleSheet">
+         <string notr="true">background-color: rgb(0, 0, 0);</string>
+        </property>
+       </widget>
       </item>
      </layout>
     </item>
     <item>
      <layout class="QGridLayout" name="gridLayout">
-      <item row="1" column="1">
-       <spacer name="horizontalSpacer_2">
-        <property name="orientation">
-         <enum>Qt::Horizontal</enum>
-        </property>
-        <property name="sizeType">
-         <enum>QSizePolicy::Fixed</enum>
-        </property>
-        <property name="sizeHint" stdset="0">
-         <size>
-          <width>40</width>
-          <height>20</height>
-         </size>
-        </property>
-       </spacer>
-      </item>
       <item row="0" column="1">
        <spacer name="verticalSpacer">
         <property name="orientation">
@@ -117,17 +101,39 @@
         </property>
        </spacer>
       </item>
-      <item row="0" column="2">
+      <item row="2" column="1">
+       <spacer name="horizontalSpacer_2">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeType">
+         <enum>QSizePolicy::Fixed</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>40</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+      <item row="0" column="3">
        <widget class="QGroupBox" name="errorMapControlsGroupBox">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
+          <horstretch>0</horstretch>
+          <verstretch>100</verstretch>
+         </sizepolicy>
+        </property>
         <property name="title">
          <string>Error map controls</string>
         </property>
         <widget class="QProgressBar" name="errorMapProgressBar">
          <property name="geometry">
           <rect>
-           <x>30</x>
+           <x>60</x>
            <y>190</y>
-           <width>601</width>
+           <width>491</width>
            <height>24</height>
           </rect>
          </property>
@@ -138,9 +144,9 @@
         <widget class="QWidget" name="layoutWidget">
          <property name="geometry">
           <rect>
-           <x>10</x>
-           <y>20</y>
-           <width>641</width>
+           <x>60</x>
+           <y>30</y>
+           <width>491</width>
            <height>111</height>
           </rect>
          </property>
@@ -242,27 +248,17 @@
         <property name="title">
          <string>Main Graph Controls</string>
         </property>
-        <widget class="QWidget" name="layoutWidget">
+        <widget class="QWidget" name="">
          <property name="geometry">
           <rect>
-           <x>41</x>
-           <y>36</y>
-           <width>624</width>
-           <height>461</height>
+           <x>160</x>
+           <y>20</y>
+           <width>481</width>
+           <height>61</height>
           </rect>
          </property>
-         <layout class="QGridLayout" name="mainGraphControlsGridLayout">
-          <item row="1" column="1" colspan="2">
-           <widget class="QSlider" name="extrapolationHorizontalSlider">
-            <property name="maximum">
-             <number>100</number>
-            </property>
-            <property name="orientation">
-             <enum>Qt::Horizontal</enum>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="0">
+         <layout class="QGridLayout" name="gridLayout_2">
+          <item row="0" column="0">
            <widget class="QLabel" name="extrapolationLabel">
             <property name="text">
              <string>Extrapolation</string>
@@ -272,98 +268,17 @@
             </property>
            </widget>
           </item>
-          <item row="2" column="0">
-           <widget class="QLabel" name="polynomialCurveFittingCoveragePrecentageLabel">
-            <property name="text">
-             <string>Signal curve fitting coverage</string>
+          <item row="0" column="1">
+           <widget class="QSlider" name="extrapolationHorizontalSlider">
+            <property name="maximum">
+             <number>100</number>
             </property>
-           </widget>
-          </item>
-          <item row="2" column="1">
-           <widget class="QLCDNumber" name="polynomialCurveFittingCoveragePrecentageLcdNumber"/>
-          </item>
-          <item row="7" column="3">
-           <widget class="QLabel" name="polynomialFittingOrderLabel">
-            <property name="text">
-             <string>Fitting order</string>
-            </property>
-           </widget>
-          </item>
-          <item row="12" column="3">
-           <widget class="QSpinBox" name="polynomialNumberOfChunksSpinBox"/>
-          </item>
-          <item row="18" column="3">
-           <widget class="QSpinBox" name="polynomialOerlapSpinBox"/>
-          </item>
-          <item row="10" column="3">
-           <widget class="QRadioButton" name="polynomialMultipleChunksRadioButton">
-            <property name="text">
-             <string>Multiple Chunks</string>
-            </property>
-           </widget>
-          </item>
-          <item row="11" column="3">
-           <widget class="QLabel" name="polynomialNumberOfChunksLabel">
-            <property name="text">
-             <string>Number of chunks</string>
-            </property>
-           </widget>
-          </item>
-          <item row="21" column="3">
-           <widget class="QPushButton" name="polynomialFitPushButton">
-            <property name="text">
-             <string>Fit</string>
-            </property>
-           </widget>
-          </item>
-          <item row="9" column="3">
-           <widget class="QRadioButton" name="polynomialOneChunkRadioButton">
-            <property name="text">
-             <string>One Chunk</string>
-            </property>
-           </widget>
-          </item>
-          <item row="17" column="3">
-           <widget class="QLabel" name="polynomialOverlapLabel">
-            <property name="text">
-             <string>overlap</string>
-            </property>
-           </widget>
-          </item>
-          <item row="2" column="2">
-           <widget class="QLabel" name="polynomialCurveFittingPrecentageLabel">
-            <property name="text">
-             <string>%</string>
-            </property>
-           </widget>
-          </item>
-          <item row="19" column="4">
-           <spacer name="horizontalSpacer_3">
             <property name="orientation">
              <enum>Qt::Horizontal</enum>
             </property>
-            <property name="sizeType">
-             <enum>QSizePolicy::Fixed</enum>
-            </property>
-            <property name="sizeHint" stdset="0">
-             <size>
-              <width>10</width>
-              <height>20</height>
-             </size>
-            </property>
-           </spacer>
-          </item>
-          <item row="18" column="4">
-           <widget class="QLabel" name="polynomialOverlappingPrecentageLabel">
-            <property name="text">
-             <string>%</string>
-            </property>
            </widget>
           </item>
-          <item row="8" column="1">
-           <widget class="QSpinBox" name="cubicSplineFittingOrderSpinBox"/>
-          </item>
-          <item row="1" column="3">
+          <item row="0" column="2">
            <widget class="QLabel" name="extrapolationPercentageLabel">
             <property name="text">
              <string>0% Original Signal</string>
@@ -373,59 +288,78 @@
             </property>
            </widget>
           </item>
-          <item row="15" column="3">
-           <widget class="QRadioButton" name="polynomialNoOverlappingRadioButton">
+          <item row="1" column="0">
+           <widget class="QLabel" name="CurveFittingCoveragePrecentageLabel">
             <property name="text">
-             <string>No Overlapping</string>
+             <string>Signal curve fitting coverage</string>
             </property>
            </widget>
           </item>
-          <item row="4" column="3">
+          <item row="1" column="1">
+           <widget class="QLCDNumber" name="CurveFittingCoveragePrecentageLcdNumber"/>
+          </item>
+          <item row="1" column="2">
+           <widget class="QLabel" name="signalCoveragePrecentageLabel">
+            <property name="text">
+             <string>%</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+        <widget class="QWidget" name="">
+         <property name="geometry">
+          <rect>
+           <x>10</x>
+           <y>100</y>
+           <width>865</width>
+           <height>401</height>
+          </rect>
+         </property>
+         <layout class="QGridLayout" name="gridLayout_3">
+          <item row="2" column="2">
+           <widget class="QSpinBox" name="polynomialFittingOrderSpinBox">
+            <property name="maximum">
+             <number>10</number>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="2">
+           <widget class="QLabel" name="polynomialFittingOrderLabel">
+            <property name="text">
+             <string>Fitting order</string>
+            </property>
+           </widget>
+          </item>
+          <item row="13" column="2">
+           <widget class="QPushButton" name="polynomialFitPushButton">
+            <property name="text">
+             <string>Fit</string>
+            </property>
+           </widget>
+          </item>
+          <item row="9" column="2">
+           <widget class="QLabel" name="polynomialOverlapLabel">
+            <property name="text">
+             <string>overlap</string>
+            </property>
+           </widget>
+          </item>
+          <item row="10" column="2">
+           <widget class="QSpinBox" name="polynomialOverlapSpinBox">
+            <property name="maximum">
+             <number>25</number>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="2">
            <widget class="QRadioButton" name="polynomialRadioButton">
             <property name="text">
              <string>Polynomial</string>
             </property>
            </widget>
           </item>
-          <item row="4" column="0">
-           <widget class="QRadioButton" name="bicubicRadioButton">
-            <property name="text">
-             <string>Bicubic</string>
-            </property>
-           </widget>
-          </item>
-          <item row="4" column="1">
-           <widget class="QRadioButton" name="cubicSplineRadioButton">
-            <property name="text">
-             <string>Cubic Spline</string>
-            </property>
-           </widget>
-          </item>
-          <item row="7" column="1">
-           <widget class="QLabel" name="cubicSplineFittingOrderLabel">
-            <property name="text">
-             <string>Fitting order</string>
-            </property>
-           </widget>
-          </item>
-          <item row="8" column="3">
-           <widget class="QSpinBox" name="polynomialFittingOrderSpinBox"/>
-          </item>
-          <item row="20" column="3">
-           <widget class="QRadioButton" name="polynomialFullCoverageRadioButton">
-            <property name="text">
-             <string>Keep 100% signal curve fitting coverage</string>
-            </property>
-           </widget>
-          </item>
-          <item row="16" column="3">
-           <widget class="QRadioButton" name="polynomialOverlappingRadioButton">
-            <property name="text">
-             <string>Overlapping</string>
-            </property>
-           </widget>
-          </item>
-          <item row="19" column="3">
+          <item row="11" column="2">
            <widget class="QRadioButton" name="polynomialConstantChunkRadioButton">
             <property name="font">
              <font>
@@ -440,25 +374,281 @@
             </property>
            </widget>
           </item>
+          <item row="0" column="0">
+           <widget class="QRadioButton" name="bicubicRadioButton">
+            <property name="text">
+             <string>Bicubic</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1">
+           <widget class="QRadioButton" name="splineRadioButton">
+            <property name="text">
+             <string>Cubic Spline</string>
+            </property>
+           </widget>
+          </item>
           <item row="3" column="2">
-           <spacer name="horizontalSpacer">
-            <property name="orientation">
-             <enum>Qt::Horizontal</enum>
+           <widget class="QRadioButton" name="polynomialOneChunkRadioButton">
+            <property name="text">
+             <string>One Chunk</string>
             </property>
-            <property name="sizeType">
-             <enum>QSizePolicy::Fixed</enum>
+           </widget>
+          </item>
+          <item row="6" column="2">
+           <widget class="QSpinBox" name="polynomialNumberOfChunksSpinBox">
+            <property name="minimum">
+             <number>1</number>
             </property>
-            <property name="sizeHint" stdset="0">
-             <size>
-              <width>40</width>
-              <height>20</height>
-             </size>
+            <property name="maximum">
+             <number>20</number>
             </property>
-           </spacer>
+           </widget>
+          </item>
+          <item row="8" column="2">
+           <widget class="QRadioButton" name="polynomialOverlappingRadioButton">
+            <property name="text">
+             <string>Overlapping</string>
+            </property>
+           </widget>
+          </item>
+          <item row="7" column="2">
+           <widget class="QRadioButton" name="polynomialNoOverlappingRadioButton">
+            <property name="text">
+             <string>No Overlapping</string>
+            </property>
+           </widget>
+          </item>
+          <item row="12" column="2">
+           <widget class="QRadioButton" name="polynomialFullCoverageRadioButton">
+            <property name="text">
+             <string>Keep 100% signal curve fitting coverage</string>
+            </property>
+           </widget>
+          </item>
+          <item row="4" column="2">
+           <widget class="QRadioButton" name="polynomialMultipleChunksRadioButton">
+            <property name="text">
+             <string>Multiple Chunks</string>
+            </property>
+           </widget>
+          </item>
+          <item row="5" column="2">
+           <widget class="QLabel" name="polynomialNumberOfChunksLabel">
+            <property name="text">
+             <string>Number of chunks</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="0">
+           <widget class="QRadioButton" name="biCubicOneChunkRadioButton">
+            <property name="text">
+             <string>One Chunk</string>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="0">
+           <widget class="QRadioButton" name="biCubicMultipleChunksRadioButton">
+            <property name="text">
+             <string>Multiple Chunks</string>
+            </property>
+           </widget>
+          </item>
+          <item row="3" column="0">
+           <widget class="QLabel" name="biCubicNumberOfChunksLabel">
+            <property name="text">
+             <string>Number of Chunks</string>
+            </property>
+           </widget>
+          </item>
+          <item row="4" column="0">
+           <widget class="QSpinBox" name="biCubicNumberOfChunksSpinBox">
+            <property name="minimum">
+             <number>1</number>
+            </property>
+            <property name="maximum">
+             <number>20</number>
+            </property>
+           </widget>
+          </item>
+          <item row="5" column="0">
+           <widget class="QRadioButton" name="biCubicNoOverlappingRadioButton">
+            <property name="text">
+             <string>No Overlapping</string>
+            </property>
+           </widget>
+          </item>
+          <item row="6" column="0">
+           <widget class="QRadioButton" name="biCubicOverlappingRadioButton">
+            <property name="text">
+             <string>Overlapping</string>
+            </property>
+           </widget>
+          </item>
+          <item row="7" column="0">
+           <widget class="QLabel" name="biCubicOverlapLabel">
+            <property name="text">
+             <string>overlap</string>
+            </property>
+           </widget>
+          </item>
+          <item row="8" column="0">
+           <widget class="QSpinBox" name="biCubicOverlapSpinBox">
+            <property name="maximum">
+             <number>25</number>
+            </property>
+           </widget>
+          </item>
+          <item row="9" column="0">
+           <widget class="QRadioButton" name="biCubicConstantChunkRadioButton">
+            <property name="font">
+             <font>
+              <strikeout>false</strikeout>
+             </font>
+            </property>
+            <property name="text">
+             <string>Keep user input's number of chunks constant</string>
+            </property>
+            <property name="autoRepeat">
+             <bool>false</bool>
+            </property>
+           </widget>
+          </item>
+          <item row="10" column="0">
+           <widget class="QRadioButton" name="biCubicFullCoverageRadioButton">
+            <property name="text">
+             <string>Keep 100% signal curve fitting coverage</string>
+            </property>
+           </widget>
+          </item>
+          <item row="11" column="0">
+           <widget class="QPushButton" name="biCubicFitPushButton">
+            <property name="text">
+             <string>Fit</string>
+            </property>
+           </widget>
+          </item>
+          <item row="13" column="1">
+           <widget class="QPushButton" name="splineFitPushButton">
+            <property name="text">
+             <string>Fit</string>
+            </property>
+           </widget>
+          </item>
+          <item row="12" column="1">
+           <widget class="QRadioButton" name="splineFullCoverageRadioButton">
+            <property name="text">
+             <string>Keep 100% signal curve fitting coverage</string>
+            </property>
+           </widget>
+          </item>
+          <item row="11" column="1">
+           <widget class="QRadioButton" name="splineConstantChunkRadioButton">
+            <property name="font">
+             <font>
+              <strikeout>false</strikeout>
+             </font>
+            </property>
+            <property name="text">
+             <string>Keep user input's number of chunks constant</string>
+            </property>
+            <property name="autoRepeat">
+             <bool>false</bool>
+            </property>
+           </widget>
+          </item>
+          <item row="10" column="1">
+           <widget class="QSpinBox" name="splineOverlapSpinBox">
+            <property name="maximum">
+             <number>25</number>
+            </property>
+           </widget>
+          </item>
+          <item row="9" column="1">
+           <widget class="QLabel" name="splineOverlapLabel">
+            <property name="text">
+             <string>overlap</string>
+            </property>
+           </widget>
+          </item>
+          <item row="8" column="1">
+           <widget class="QRadioButton" name="splineOverlappingRadioButton">
+            <property name="text">
+             <string>Overlapping</string>
+            </property>
+           </widget>
+          </item>
+          <item row="7" column="1">
+           <widget class="QRadioButton" name="splineNoOverlappingRadioButton">
+            <property name="text">
+             <string>No Overlapping</string>
+            </property>
+           </widget>
+          </item>
+          <item row="6" column="1">
+           <widget class="QSpinBox" name="splineNumberOfChunksSpinBox">
+            <property name="minimum">
+             <number>1</number>
+            </property>
+            <property name="maximum">
+             <number>20</number>
+            </property>
+           </widget>
+          </item>
+          <item row="5" column="1">
+           <widget class="QLabel" name="splineNumberOfChunksLabel">
+            <property name="text">
+             <string>Number of Chunks</string>
+            </property>
+           </widget>
+          </item>
+          <item row="4" column="1">
+           <widget class="QRadioButton" name="splineMultipleChunksRadioButton">
+            <property name="text">
+             <string>Multiple Chunks</string>
+            </property>
+           </widget>
+          </item>
+          <item row="3" column="1">
+           <widget class="QRadioButton" name="splineOneChunkRadioButton">
+            <property name="text">
+             <string>One Chunk</string>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="1">
+           <widget class="QSpinBox" name="splineFittingOrderSpinBox">
+            <property name="maximum">
+             <number>10</number>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="1">
+           <widget class="QLabel" name="splineFittingOrderLabel">
+            <property name="text">
+             <string>Fitting order</string>
+            </property>
+           </widget>
           </item>
          </layout>
         </widget>
        </widget>
+      </item>
+      <item row="2" column="0">
+       <spacer name="horizontalSpacer">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeType">
+         <enum>QSizePolicy::Fixed</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>880</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
       </item>
      </layout>
     </item>
@@ -469,7 +659,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1382</width>
+     <width>1470</width>
      <height>26</height>
     </rect>
    </property>
