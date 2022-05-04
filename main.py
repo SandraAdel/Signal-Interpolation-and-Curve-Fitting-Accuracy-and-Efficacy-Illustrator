@@ -7,8 +7,8 @@ import pyqtgraph
 from pyqtgraph import PlotWidget
 import pandas as pd
 import numpy as np
-from sympy import rad
-import more_itertools as mit
+import matplotlib.pyplot as plt
+from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from GUI import Ui_MainWindow
 
 
@@ -66,6 +66,7 @@ class MainWindow(QMainWindow):
         self.ui.polynomialFitPushButton.clicked.connect(lambda: self.interpolation())
         self.ui.extrapolationHorizontalSlider.valueChanged.connect(lambda: self.extrapolation())
         self.ui.xAxisComboBox.currentIndexChanged.connect(lambda: self.xAxis())
+        # self.ui.yAxisComboBox.currentIndexChanged.connect(lambda: self.yAxis())
         self.ui.polynomialOverlappingRadioButton.toggled.connect(lambda: self.polynomialOverlapRadioButton())
         self.ui.polynomialNoOverlappingRadioButton.toggled.connect(lambda: self.polynomialNoOverlapRadioButton())
         self.ui.polynomialConstantChunkRadioButton.toggled.connect(lambda: self.keepConstantChunkRadioButton())
@@ -77,6 +78,7 @@ class MainWindow(QMainWindow):
         self.data_frame = pd.read_csv(self.file_name, encoding = 'utf-8').fillna(0)
         self.TimeReadings = self.data_frame.iloc[:,0].to_numpy()
         self.AmplitudeReadings = self.data_frame.iloc[:,1].to_numpy()
+        self.clearErrorMap()
         self.ui.mainGraphGraphicsView.plot(self.TimeReadings, self.AmplitudeReadings, pen=pyqtgraph.mkPen('b', width=1.5))
             
     #! COODE REPETITION TACK CAAAAAAAAAAAAAAARE 
@@ -203,7 +205,22 @@ class MainWindow(QMainWindow):
         elif self.ui.xAxisComboBox.currentText() == 'Overlapping':
             self.ui.yAxisComboBox.clear()
             yAxisList = ["Order of polynomial","Number of chunks"]
-            self.ui.yAxisComboBox.addItems(yAxisList)  
+            self.ui.yAxisComboBox.addItems(yAxisList) 
+
+    # def yAxis(self):
+    #     if self.ui.yAxisComboBox.currentText() == 'Order of polynomial':
+    #         self.ui.xAxisComboBox.clear()
+    #         xAxisList = ["Number of chunks","Overlapping"]
+    #         self.ui.xAxisComboBox.addItems(xAxisList)
+    #     elif self.ui.yAxisComboBox.currentText() == 'Number of chunks':
+    #         self.ui.xAxisComboBox.clear()
+    #         xAxisList = ["Order of polynomial","Overlapping"]
+    #         self.ui.xAxisComboBox.addItems(xAxisList)
+    #     elif self.ui.yAxisComboBox.currentText() == 'Overlapping':
+    #         self.ui.xAxisComboBox.clear()
+    #         xAxisList = ["Order of polynomial","Number of chunks"]
+    #         self.ui.xAxisComboBox.addItems(xAxisList) 
+        
     
     def keepConstantChunkRadioButton(self):
         if self.ui.polynomialConstantChunkRadioButton.isChecked(): self.ShowPopUpMessage("Signal curve fitting coverage may not be 100%.") 
@@ -239,6 +256,10 @@ class MainWindow(QMainWindow):
         self.extrapolationSliderValue = self.ui.extrapolationHorizontalSlider.value()
         self.ui.extrapolationPercentageLabel.setText(f'{self.extrapolationSliderValue}% Original Signal')
 
+    def clearErrorMap(self):
+        self.figure = plt.figure(figsize=(15,5))
+        self.Canvas = FigureCanvas(self.figure)
+        self.ui.errorMapGridLayout.addWidget(self.Canvas,0, 0, 1, 1)
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)

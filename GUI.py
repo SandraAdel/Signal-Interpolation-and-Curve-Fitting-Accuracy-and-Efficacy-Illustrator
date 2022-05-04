@@ -21,11 +21,11 @@ class Ui_MainWindow(object):
         self.verticalLayout.setObjectName("verticalLayout")
         self.mainGraphAndErrorMapGridLayout = QtWidgets.QGridLayout()
         self.mainGraphAndErrorMapGridLayout.setObjectName("mainGraphAndErrorMapGridLayout")
+        spacerItem = QtWidgets.QSpacerItem(850, 20, QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Minimum)
+        self.mainGraphAndErrorMapGridLayout.addItem(spacerItem, 2, 0, 1, 1)
         self.latexEquationLabel = QtWidgets.QLabel(self.centralwidget)
         self.latexEquationLabel.setObjectName("latexEquationLabel")
         self.mainGraphAndErrorMapGridLayout.addWidget(self.latexEquationLabel, 0, 0, 1, 1)
-        spacerItem = QtWidgets.QSpacerItem(850, 20, QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Minimum)
-        self.mainGraphAndErrorMapGridLayout.addItem(spacerItem, 2, 0, 1, 1)
         self.mainGraphGraphicsView = PlotWidget(self.centralwidget)
         self.mainGraphGraphicsView.setStyleSheet("background-color: rgb(0, 0, 0);")
         self.mainGraphGraphicsView.setObjectName("mainGraphGraphicsView")
@@ -33,12 +33,15 @@ class Ui_MainWindow(object):
         self.errorLabel = QtWidgets.QLabel(self.centralwidget)
         self.errorLabel.setObjectName("errorLabel")
         self.mainGraphAndErrorMapGridLayout.addWidget(self.errorLabel, 0, 2, 1, 1)
+        spacerItem1 = QtWidgets.QSpacerItem(0, 300, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Fixed)
+        self.mainGraphAndErrorMapGridLayout.addItem(spacerItem1, 1, 1, 1, 1)
+        self.errorMapGridLayout = QtWidgets.QGridLayout()
+        self.errorMapGridLayout.setObjectName("errorMapGridLayout")
         self.errorMapGraphicsView = PlotWidget(self.centralwidget)
         self.errorMapGraphicsView.setStyleSheet("background-color: rgb(0, 0, 0);")
         self.errorMapGraphicsView.setObjectName("errorMapGraphicsView")
-        self.mainGraphAndErrorMapGridLayout.addWidget(self.errorMapGraphicsView, 1, 2, 1, 1)
-        spacerItem1 = QtWidgets.QSpacerItem(0, 300, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Fixed)
-        self.mainGraphAndErrorMapGridLayout.addItem(spacerItem1, 1, 1, 1, 1)
+        self.errorMapGridLayout.addWidget(self.errorMapGraphicsView, 0, 0, 1, 1)
+        self.mainGraphAndErrorMapGridLayout.addLayout(self.errorMapGridLayout, 1, 2, 1, 1)
         self.verticalLayout.addLayout(self.mainGraphAndErrorMapGridLayout)
         self.gridLayout = QtWidgets.QGridLayout()
         self.gridLayout.setObjectName("gridLayout")
@@ -246,7 +249,6 @@ class Ui_MainWindow(object):
         self.openAction.setText(_translate("MainWindow", "Open"))
         self.openAction.setShortcut(_translate("MainWindow", "Ctrl+O"))
 from pyqtgraph import PlotWidget
-
 
 
 if __name__ == "__main__":
