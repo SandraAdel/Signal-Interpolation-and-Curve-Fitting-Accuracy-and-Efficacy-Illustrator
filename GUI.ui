@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>1470</width>
-    <height>1000</height>
+    <height>1044</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -15,6 +15,16 @@
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QVBoxLayout" name="verticalLayout">
+    <item>
+     <layout class="QGridLayout" name="gridLayout_4">
+      <item row="0" column="1">
+       <widget class="QComboBox" name="latexEquationComboBox"/>
+      </item>
+      <item row="0" column="0">
+       <widget class="QLineEdit" name="latexEquationLineEdit"/>
+      </item>
+     </layout>
+    </item>
     <item>
      <layout class="QGridLayout" name="mainGraphAndErrorMapGridLayout">
       <item row="1" column="2">
@@ -186,7 +196,7 @@
            </widget>
           </item>
           <item row="2" column="0">
-           <widget class="QLabel" name="constantParameterLabel">
+           <widget class="QLabel" name="label">
             <property name="text">
              <string>Constant Parameter</string>
             </property>
@@ -240,7 +250,7 @@
            </widget>
           </item>
           <item row="2" column="2">
-           <widget class="QSpinBox" name="constantParameterSpinBox"/>
+           <widget class="QSpinBox" name="spinBox"/>
           </item>
          </layout>
         </widget>
@@ -378,16 +388,16 @@
            </widget>
           </item>
           <item row="0" column="0">
-           <widget class="QRadioButton" name="bicubicRadioButton">
+           <widget class="QRadioButton" name="cubicRadioButton">
             <property name="text">
-             <string>Bicubic</string>
+             <string>Cubic</string>
             </property>
            </widget>
           </item>
           <item row="0" column="1">
            <widget class="QRadioButton" name="splineRadioButton">
             <property name="text">
-             <string>Cubic Spline</string>
+             <string>Spline</string>
             </property>
            </widget>
           </item>
@@ -444,28 +454,28 @@
            </widget>
           </item>
           <item row="1" column="0">
-           <widget class="QRadioButton" name="biCubicOneChunkRadioButton">
+           <widget class="QRadioButton" name="cubicOneChunkRadioButton">
             <property name="text">
              <string>One Chunk</string>
             </property>
            </widget>
           </item>
           <item row="2" column="0">
-           <widget class="QRadioButton" name="biCubicMultipleChunksRadioButton">
+           <widget class="QRadioButton" name="cubicMultipleChunksRadioButton">
             <property name="text">
              <string>Multiple Chunks</string>
             </property>
            </widget>
           </item>
           <item row="3" column="0">
-           <widget class="QLabel" name="biCubicNumberOfChunksLabel">
+           <widget class="QLabel" name="cubicNumberOfChunksLabel">
             <property name="text">
              <string>Number of Chunks</string>
             </property>
            </widget>
           </item>
           <item row="4" column="0">
-           <widget class="QSpinBox" name="biCubicNumberOfChunksSpinBox">
+           <widget class="QSpinBox" name="cubicNumberOfChunksSpinBox">
             <property name="minimum">
              <number>1</number>
             </property>
@@ -475,35 +485,35 @@
            </widget>
           </item>
           <item row="5" column="0">
-           <widget class="QRadioButton" name="biCubicNoOverlappingRadioButton">
+           <widget class="QRadioButton" name="cubicNoOverlappingRadioButton">
             <property name="text">
              <string>No Overlapping</string>
             </property>
            </widget>
           </item>
           <item row="6" column="0">
-           <widget class="QRadioButton" name="biCubicOverlappingRadioButton">
+           <widget class="QRadioButton" name="cubicOverlappingRadioButton">
             <property name="text">
              <string>Overlapping</string>
             </property>
            </widget>
           </item>
           <item row="7" column="0">
-           <widget class="QLabel" name="biCubicOverlapLabel">
+           <widget class="QLabel" name="cubicOverlapLabel">
             <property name="text">
              <string>overlap</string>
             </property>
            </widget>
           </item>
           <item row="8" column="0">
-           <widget class="QSpinBox" name="biCubicOverlapSpinBox">
+           <widget class="QSpinBox" name="cubicOverlapSpinBox">
             <property name="maximum">
              <number>25</number>
             </property>
            </widget>
           </item>
           <item row="9" column="0">
-           <widget class="QRadioButton" name="biCubicConstantChunkRadioButton">
+           <widget class="QRadioButton" name="cubicConstantChunkRadioButton">
             <property name="font">
              <font>
               <strikeout>false</strikeout>
@@ -518,14 +528,14 @@
            </widget>
           </item>
           <item row="10" column="0">
-           <widget class="QRadioButton" name="biCubicFullCoverageRadioButton">
+           <widget class="QRadioButton" name="cubicFullCoverageRadioButton">
             <property name="text">
              <string>Keep 100% signal curve fitting coverage</string>
             </property>
            </widget>
           </item>
           <item row="11" column="0">
-           <widget class="QPushButton" name="biCubicFitPushButton">
+           <widget class="QPushButton" name="cubicFitPushButton">
             <property name="text">
              <string>Fit</string>
             </property>
