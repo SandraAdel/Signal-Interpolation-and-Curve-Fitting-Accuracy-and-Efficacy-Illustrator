@@ -73,7 +73,7 @@
       <item row="1" column="2">
        <layout class="QGridLayout" name="errorMapGridLayout">
         <item row="0" column="0">
-         <widget class="PlotWidget" name="errorMapGraphicsView">
+         <widget class="MplWidget" name="errorMapGraphicsView">
           <property name="styleSheet">
            <string notr="true">background-color: rgb(0, 0, 0);</string>
           </property>
@@ -470,7 +470,7 @@
      <x>0</x>
      <y>0</y>
      <width>1382</width>
-     <height>26</height>
+     <height>21</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
@@ -484,7 +484,7 @@
   <widget class="QStatusBar" name="statusbar"/>
   <action name="openAction">
    <property name="icon">
-    <iconset resource="../../../../../images.qrc">
+    <iconset>
      <normaloff>:/image/icons/open.png</normaloff>:/image/icons/open.png</iconset>
    </property>
    <property name="text">
@@ -501,9 +501,12 @@
    <extends>QGraphicsView</extends>
    <header>pyqtgraph.h</header>
   </customwidget>
+  <customwidget>
+   <class>MplWidget</class>
+   <extends>QGraphicsView</extends>
+   <header>mplwidget.h</header>
+  </customwidget>
  </customwidgets>
- <resources>
-  <include location="../../../../../images.qrc"/>
- </resources>
+ <resources/>
  <connections/>
 </ui>
