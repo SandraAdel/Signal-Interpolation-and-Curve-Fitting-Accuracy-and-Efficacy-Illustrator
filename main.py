@@ -211,6 +211,7 @@ class MainWindow(QMainWindow):
             self.ui.signalCoveragePrecentageLabel.show()
             self.splineShowAndHide(0)
             self.cubicShowAndHide(0)
+            self.setSpinBox('Polynomial', False)
         elif self.ui.splineRadioButton.isChecked():
             self.ui.splineFitPushButton.show()
             self.ui.splineMultipleChunksRadioButton.show()
@@ -222,6 +223,7 @@ class MainWindow(QMainWindow):
             self.ui.signalCoveragePrecentageLabel.show()
             self.polynomialShowAndHide(0)
             self.cubicShowAndHide(0)
+            self.setSpinBox('Spline', False)
         elif self.ui.cubicRadioButton.isChecked():
             self.ui.cubicFitPushButton.show()
             self.ui.cubicMultipleChunksRadioButton.show()
@@ -231,6 +233,8 @@ class MainWindow(QMainWindow):
             self.ui.signalCoveragePrecentageLabel.show()
             self.splineShowAndHide(0)
             self.polynomialShowAndHide(0)
+            self.setSpinBox('Cubic', True)
+
             
     def multipleChunksRadioButton (self):
         if self.ui.polynomialMultipleChunksRadioButton.isChecked():
@@ -253,6 +257,7 @@ class MainWindow(QMainWindow):
     def oneChunkRadioButton (self):
         if self.ui.polynomialOneChunkRadioButton.isChecked():
             self.isMultiple = False
+            self.setSpinBox('Polynomial', True)
             self.ui.polynomialNumberOfChunksLabel.hide()
             self.ui.polynomialNumberOfChunksSpinBox.hide()
             self.ui.polynomialOverlapSpinBox.hide()
@@ -264,6 +269,7 @@ class MainWindow(QMainWindow):
             self.ui.polynomialFullCoverageRadioButton.hide()
             self.ui.polynomialConstantChunkRadioButton.hide()
         elif self.ui.splineOneChunkRadioButton.isChecked():
+            self.setSpinBox('Spline', True)
             self.ui.splineNumberOfChunksLabel.hide()
             self.ui.splineNumberOfChunksSpinBox.hide()
             self.ui.splineOverlapSpinBox.hide()
@@ -275,6 +281,7 @@ class MainWindow(QMainWindow):
             self.ui.splineFullCoverageRadioButton.hide()
             self.ui.splineConstantChunkRadioButton.hide()
         elif self.ui.cubicOneChunkRadioButton.isChecked():
+            self.setSpinBox('Cubic', True)
             self.ui.cubicNumberOfChunksLabel.hide()
             self.ui.cubicNumberOfChunksSpinBox.hide()
             self.ui.cubicOverlapSpinBox.hide()
@@ -476,6 +483,53 @@ class MainWindow(QMainWindow):
 
     def ShowPopUpMessage(self, popUpMessage):
             messageBoxElement = QMessageBox.warning(self, 'WARING!', popUpMessage) 
+    
+    def setSpinBox(self, kind, one):
+        if kind == 'Polynomial'and one == True:
+            self.ui.splineFittingOrderSpinBox.setValue(0)
+            self.ui.splineNumberOfChunksSpinBox.setValue(1)
+            self.ui.splineOverlapSpinBox.setValue(0)
+            self.ui.cubicNumberOfChunksSpinBox.setValue(1)
+            self.ui.cubicOverlapSpinBox.setValue(0)
+            self.ui.polynomialOverlapSpinBox.setValue(0)
+            self.ui.polynomialNumberOfChunksSpinBox.setValue(1)
+        elif kind == 'Polynomial'and one == False:
+            self.ui.splineFittingOrderSpinBox.setValue(0)
+            self.ui.splineNumberOfChunksSpinBox.setValue(1)
+            self.ui.splineOverlapSpinBox.setValue(0)
+            self.ui.cubicNumberOfChunksSpinBox.setValue(1)
+            self.ui.cubicOverlapSpinBox.setValue(0)
+            self.ui.polynomialOverlapSpinBox.setValue(0)
+            self.ui.polynomialNumberOfChunksSpinBox.setValue(1)
+            self.ui.polynomialFittingOrderSpinBox.setValue(0)
+        elif kind == 'Spline'and one == True:
+            self.ui.cubicNumberOfChunksSpinBox.setValue(1)
+            self.ui.cubicOverlapSpinBox.setValue(0)
+            self.ui.polynomialOverlapSpinBox.setValue(0)
+            self.ui.polynomialNumberOfChunksSpinBox.setValue(1)
+            self.ui.polynomialFittingOrderSpinBox.setValue(0)
+            self.ui.splineOverlapSpinBox.setValue(0)
+            self.ui.splineNumberOfChunksSpinBox.setValue(1)
+        elif kind == 'Spline'and one == False:
+            self.ui.cubicNumberOfChunksSpinBox.setValue(1)
+            self.ui.cubicOverlapSpinBox.setValue(0)
+            self.ui.polynomialOverlapSpinBox.setValue(0)
+            self.ui.polynomialNumberOfChunksSpinBox.setValue(1)
+            self.ui.polynomialFittingOrderSpinBox.setValue(0)
+            self.ui.splineOverlapSpinBox.setValue(0)
+            self.ui.splineNumberOfChunksSpinBox.setValue(1)
+            self.ui.splineFittingOrderSpinBox.setValue(0)
+        elif kind == 'Cubic' and one == True:            
+            self.ui.cubicNumberOfChunksSpinBox.setValue(1)
+            self.ui.cubicOverlapSpinBox.setValue(0)
+            self.ui.polynomialOverlapSpinBox.setValue(0)
+            self.ui.polynomialNumberOfChunksSpinBox.setValue(1)
+            self.ui.polynomialFittingOrderSpinBox.setValue(0)
+            self.ui.splineOverlapSpinBox.setValue(0)
+            self.ui.splineNumberOfChunksSpinBox.setValue(1)
+            self.ui.splineFittingOrderSpinBox.setValue(0)
+
+
     #!################################################################################
     def interpolationPolynomial (self):
         self.chunckSize = ceil(1000/self.ui.polynomialNumberOfChunksSpinBox.value())
@@ -608,6 +662,7 @@ class MainWindow(QMainWindow):
         self.ui.mainGraphGraphicsView.plot(self.TimeReadings, self.AmplitudeReadings, pen=pyqtgraph.mkPen('b', width=1.5))
         interpolated_curve_readings, curve_fitting_MSE = self.CurveFitFunctionality(self.ui.polynomialNumberOfChunksSpinBox.value(),self.ui.polynomialOverlapSpinBox.value(),'Polynomial', self.ui.polynomialFittingOrderSpinBox.value(), True)
         self.CurveFittingCoverageCalculation(interpolated_curve_readings)
+        self.ui.precentageOfErrorLcdNumber.display(curve_fitting_MSE)
         self.ui.latexEquationComboBox.clear()
         for i in range(1, self.ui.polynomialNumberOfChunksSpinBox.value()+1):
             self.ui.latexEquationComboBox.addItem('Chunk '+ str(i))
