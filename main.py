@@ -11,7 +11,6 @@ import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from GUI2 import Ui_MainWindow
-from scipy.interpolate import CubicSpline
 from scipy.interpolate import make_interp_spline
 from scipy.interpolate import interp1d
 import seaborn as sns
@@ -801,7 +800,6 @@ class MainWindow(QMainWindow):
             qp = QPixmap()
             qp.loadFromData(image_bytes)
             self.ui.latexEquationLabel.setPixmap(qp)
-
 
 
     # Sandra's Addition: General Function
