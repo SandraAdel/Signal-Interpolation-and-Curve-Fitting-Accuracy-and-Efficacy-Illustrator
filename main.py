@@ -592,59 +592,18 @@ class MainWindow(QMainWindow):
         self.ui.errorMapGridLayout.addWidget(self.Canvas,0, 0, 1, 1)
 
     def interpolationSpline(self):
-        # self.chunkSizespline = int(1000/self.ui.splineNumberOfChunksSpinBox.value())
-        # order = self.ui.splineFittingOrderSpinBox.value()
         self.ui.mainGraphGraphicsView.clear()
         self.ui.mainGraphGraphicsView.plot(self.TimeReadings, self.AmplitudeReadings, pen=pyqtgraph.mkPen('b', width=1.5))
         interpolated_curve_readings, curve_fitting_MSE = self.CurveFitFunctionality(self.ui.splineNumberOfChunksSpinBox.value(),self.ui.splineOverlapSpinBox.value(),'Spline', self.ui.splineFittingOrderSpinBox.value(), True)
         self.CurveFittingCoverageCalculation(interpolated_curve_readings)
-        # tnew = np.linspace(min(self.TimeReadings), max(self.TimeReadings),1000)
-        # spline = make_interp_spline(self.TimeReadings, self.AmplitudeReadings, k=1)
-        # ampNew = spline(tnew)
-        # self.ui.mainGraphGraphicsView.plot(self.TimeReadings, self.AmplitudeReadings, pen=pyqtgraph.mkPen('b', width=1.5))
-        # self.ui.mainGraphGraphicsView.plot(tnew, ampNew, pen=pyqtgraph.mkPen('g', width=1.5, style = QtCore.Qt.DotLine))
-        # self.ui.mainGraphGraphicsView.plot(self.TimeReadings, self.AmplitudeReadings, pen=pyqtgraph.mkPen('b', width=1.5))
         
-        # for i in range(0,len(self.TimeReadings)-1,self.chunkSizespline):
-        #     amplitude = []
-        #     time = []
-        #     increment = i
-        #     for j in range(self.chunkSizespline-1):
-        #         if increment < len(self.TimeReadings):
-        #             amplitude.append(self.AmplitudeReadings[increment])
-        #             time.append(self.TimeReadings[increment])
-        #             increment += 1
-        #     tmodel = np.linspace(min(time), max(time), 1000)
-        #     tnew = np.linspace(min(time), max(time),1000)
-        #     spline = make_interp_spline(time[0:int(self.chunkSizespline-1)], amplitude[0:int(self.chunkSizespline-1)], k=order)
-        #     ampNew = spline(tnew)
-        #     print(np.poly1d(spline))
-        #     cs = CubicSpline(time[0:int(self.chunkSizespline-1)], amplitude[0:int(self.chunkSizespline-1)], bc_type='clamped')
-        #     self.ui.mainGraphGraphicsView.plot(self.TimeReadings, self.AmplitudeReadings, pen=pyqtgraph.mkPen('b', width=1.5))
-        #     self.ui.mainGraphGraphicsView.plot(tmodel, cs(tmodel), pen=pyqtgraph.mkPen('g', width=1.5, style = QtCore.Qt.DotLine))
-        #     self.ui.mainGraphGraphicsView.plot(tnew, ampNew, pen=pyqtgraph.mkPen('g', width=1.5, style = QtCore.Qt.DotLine))
 
     def interpolationCubic(self):
-        # tnew = np.linspace(min(self.TimeReadings), max(self.TimeReadings),1000)
         self.ui.mainGraphGraphicsView.clear()
         self.ui.mainGraphGraphicsView.plot(self.TimeReadings, self.AmplitudeReadings, pen=pyqtgraph.mkPen('b', width=1.5))
         interpolated_curve_readings, curve_fitting_MSE = self.CurveFitFunctionality(self.ui.cubicNumberOfChunksSpinBox.value(),self.ui.cubicOverlapSpinBox.value(),'Cubic', 'cubic', True)
         self.CurveFittingCoverageCalculation(interpolated_curve_readings)
-        # self.chunkSizespline = int(1000/self.ui.cubicNumberOfChunksSpinBox.value())
-        # for i in range(0,len(self.TimeReadings)-1,self.chunkSizespline):
-        #     amplitude = []
-        #     time = []
-        #     increment = i
-        #     for j in range(self.chunkSizespline-1):
-        #         if increment < len(self.TimeReadings):
-        #             amplitude.append(self.AmplitudeReadings[increment])
-        #             time.append(self.TimeReadings[increment])
-        #             increment += 1
-        #     self.ui.mainGraphGraphicsView.clear()
-        #     cubic = interp1d(self.TimeReadings, self.AmplitudeReadings, kind='cubic')
-        #     self.ui.mainGraphGraphicsView.plot(self.TimeReadings, self.AmplitudeReadings, pen=pyqtgraph.mkPen('b', width=1.5))
-        #     self.ui.mainGraphGraphicsView.plot(self.TimeReadings, cubic(self.TimeReadings), pen=pyqtgraph.mkPen('g', width=1.5, style = QtCore.Qt.DotLine))
-    
+        
     def chunkEquations(self, chunkNumber):
         count = 0
         self.chunckSize = ceil(1000/self.ui.polynomialNumberOfChunksSpinBox.value())
