@@ -167,8 +167,8 @@ class MainWindow(QMainWindow):
         self.ui.cubicRadioButton.toggled.connect(lambda: self.interpolationMethodsRadioButton())
         self.ui.polynomialFitPushButton.clicked.connect(lambda: self.interpolationMethods())
         self.ui.extrapolationHorizontalSlider.valueChanged.connect(lambda: self.extrapolation())
-        self.ui.xAxisComboBox.currentIndexChanged.connect(lambda: self.xAxis())
-        # self.ui.yAxisComboBox.currentIndexChanged.connect(lambda: self.yAxis())
+        self.ui.xAxisComboBox.textActivated.connect(lambda: self.xAxis())
+        self.ui.yAxisComboBox.textActivated.connect(lambda: self.yAxis())
         self.ui.polynomialOverlappingRadioButton.toggled.connect(lambda: self.OverlapRadioButton())
         self.ui.splineOverlappingRadioButton.toggled.connect(lambda: self.OverlapRadioButton())
         self.ui.cubicOverlappingRadioButton.toggled.connect(lambda: self.OverlapRadioButton())
@@ -431,32 +431,40 @@ class MainWindow(QMainWindow):
             self.ui.cubicOverlapSpinBox.show()
 
     def xAxis(self):
-        if self.ui.xAxisComboBox.currentText() == 'Polynomial Order':
+        if self.ui.xAxisComboBox.currentText() == 'Choose Axis Parameter':
             self.ui.yAxisComboBox.clear()
-            yAxisList = ["Number of Chunks","Overlapping Percentage"]
+            yAxisList = ["Polynomial Order", "Number of Chunks", "Overlapping Percentage", "Choose Axis Parameter"]
+            self.ui.yAxisComboBox.addItems(yAxisList)
+        elif self.ui.xAxisComboBox.currentText() == 'Polynomial Order':
+            self.ui.yAxisComboBox.clear()
+            yAxisList = ["Number of Chunks", "Overlapping Percentage", "Choose Axis Parameter"]
             self.ui.yAxisComboBox.addItems(yAxisList)
         elif self.ui.xAxisComboBox.currentText() == 'Number of Chunks':
             self.ui.yAxisComboBox.clear()
-            yAxisList = ["Polynomial Order","Overlapping Percentage"]
+            yAxisList = ["Polynomial Order", "Overlapping Percentage", "Choose Axis Parameter"]
             self.ui.yAxisComboBox.addItems(yAxisList)
         elif self.ui.xAxisComboBox.currentText() == 'Overlapping Percentage':
             self.ui.yAxisComboBox.clear()
-            yAxisList = ["Polynomial Order","Number of Chunks"]
+            yAxisList = ["Polynomial Order", "Number of Chunks", "Choose Axis Parameter"]
             self.ui.yAxisComboBox.addItems(yAxisList) 
 
-    # def yAxis(self):
-    #     if self.ui.yAxisComboBox.currentText() == 'Polynomial Order':
-    #         self.ui.xAxisComboBox.clear()
-    #         xAxisList = ["Number of Chunks","Overlapping Percentage"]
-    #         self.ui.xAxisComboBox.addItems(xAxisList)
-    #     elif self.ui.yAxisComboBox.currentText() == 'Number of Chunks':
-    #         self.ui.xAxisComboBox.clear()
-    #         xAxisList = ["Polynomial Order","Overlapping Percentage"]
-    #         self.ui.xAxisComboBox.addItems(xAxisList)
-    #     elif self.ui.yAxisComboBox.currentText() == 'Overlapping Percentage':
-    #         self.ui.xAxisComboBox.clear()
-    #         xAxisList = ["Polynomial Order","Number of Chunks"]
-    #         self.ui.xAxisComboBox.addItems(xAxisList) 
+    def yAxis(self):
+        if self.ui.yAxisComboBox.currentText() == 'Choose Axis Parameter':
+            self.ui.xAxisComboBox.clear()
+            xAxisList = ["Polynomial Order", "Number of Chunks", "Overlapping Percentage", "Choose Axis Parameter"]
+            self.ui.xAxisComboBox.addItems(xAxisList)
+        elif self.ui.yAxisComboBox.currentText() == 'Polynomial Order':
+            self.ui.xAxisComboBox.clear()
+            xAxisList = ["Number of Chunks", "Overlapping Percentage", "Choose Axis Parameter"]
+            self.ui.xAxisComboBox.addItems(xAxisList)
+        elif self.ui.yAxisComboBox.currentText() == 'Number of Chunks':
+            self.ui.xAxisComboBox.clear()
+            xAxisList = ["Polynomial Order", "Overlapping Percentage", "Choose Axis Parameter"]
+            self.ui.xAxisComboBox.addItems(xAxisList)
+        elif self.ui.yAxisComboBox.currentText() == 'Overlapping Percentage':
+            self.ui.xAxisComboBox.clear()
+            xAxisList = ["Polynomial Order", "Number of Chunks", "Choose Axis Parameter"]
+            self.ui.xAxisComboBox.addItems(xAxisList) 
         
     
     def keepConstantChunkRadioButton(self):
@@ -662,7 +670,7 @@ class MainWindow(QMainWindow):
         self.ui.mainGraphGraphicsView.plot(self.TimeReadings, self.AmplitudeReadings, pen=pyqtgraph.mkPen('b', width=1.5))
         interpolated_curve_readings, curve_fitting_MSE = self.CurveFitFunctionality(self.ui.polynomialNumberOfChunksSpinBox.value(),self.ui.polynomialOverlapSpinBox.value(),'Polynomial', self.ui.polynomialFittingOrderSpinBox.value(), True)
         self.CurveFittingCoverageCalculation(interpolated_curve_readings)
-        self.ui.precentageOfErrorLcdNumber.display(curve_fitting_MSE)
+        self.ui.precentageOfErrorLcdNumber.display(round(curve_fitting_MSE, 2))
         self.ui.latexEquationComboBox.clear()
         for i in range(1, self.ui.polynomialNumberOfChunksSpinBox.value()+1):
             self.ui.latexEquationComboBox.addItem('Chunk '+ str(i))
@@ -737,7 +745,7 @@ class MainWindow(QMainWindow):
                 pass
         # percentage error calculation
         curve_fitting_MSE = mean_squared_error( self.AmplitudeReadings[:len(interpolated_curve_readings)], interpolated_curve_readings )
-        return interpolated_curve_readings, curve_fitting_MSE
+        return interpolated_curve_readings, curve_fitting_MSE*100
 
     def reportProgress(self, progressValue):
         self.ui.errorMapProgressBar.setValue(progressValue)
@@ -811,8 +819,6 @@ class MainWindow(QMainWindow):
         plt.close(fig)
         return buffer_.getvalue()
         
-
-
     def equation(self):
         global degree
         if self.isMultiple == False:

@@ -145,7 +145,17 @@
             <widget class="QComboBox" name="xAxisComboBox">
              <item>
               <property name="text">
+               <string>Choose Axis Parameter</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
                <string>Polynomial Order</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>Number of Chunks</string>
               </property>
              </item>
              <item>
@@ -177,6 +187,16 @@
            </item>
            <item row="1" column="2">
             <widget class="QComboBox" name="yAxisComboBox">
+             <item>
+              <property name="text">
+               <string>Choose Axis Parameter</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>Polynomial Order</string>
+              </property>
+             </item>
              <item>
               <property name="text">
                <string>Number of Chunks</string>

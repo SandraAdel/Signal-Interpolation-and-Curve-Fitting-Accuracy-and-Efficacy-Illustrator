@@ -10,31 +10,6 @@
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 
-class Slider(QtWidgets.QSlider):
-    def mousePressEvent(self, event):
-        super(Slider, self).mousePressEvent(event)
-        if event.button() == QtCore.Qt.LeftButton:
-            val = self.pixelPosToRangeValue(event.pos())
-            self.setValue(val)
-
-    def pixelPosToRangeValue(self, pos):
-        opt = QtWidgets.QStyleOptionSlider()
-        self.initStyleOption(opt)
-        gr = self.style().subControlRect(QtWidgets.QStyle.CC_Slider, opt, QtWidgets.QStyle.SC_SliderGroove, self)
-        sr = self.style().subControlRect(QtWidgets.QStyle.CC_Slider, opt, QtWidgets.QStyle.SC_SliderHandle, self)
-
-        if self.orientation() == QtCore.Qt.Horizontal:
-            sliderLength = sr.width()
-            sliderMin = gr.x()
-            sliderMax = gr.right() - sliderLength + 1
-        else:
-            sliderLength = sr.height()
-            sliderMin = gr.y()
-            sliderMax = gr.bottom() - sliderLength + 1;
-        pr = pos - sr.center() + sr.topLeft()
-        p = pr.x() if self.orientation() == QtCore.Qt.Horizontal else pr.y()
-        return QtWidgets.QStyle.sliderValueFromPosition(self.minimum(), self.maximum(), p - sliderMin,
-                                               sliderMax - sliderMin, opt.upsideDown)
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
@@ -97,6 +72,8 @@ class Ui_MainWindow(object):
         self.xAxisComboBox.setObjectName("xAxisComboBox")
         self.xAxisComboBox.addItem("")
         self.xAxisComboBox.addItem("")
+        self.xAxisComboBox.addItem("")
+        self.xAxisComboBox.addItem("")
         self.xAxisAndYAxisGridLayout.addWidget(self.xAxisComboBox, 0, 2, 1, 1)
         self.yAxisLabel = QtWidgets.QLabel(self.errorMapControlsGroupBox)
         self.yAxisLabel.setAlignment(QtCore.Qt.AlignCenter)
@@ -108,6 +85,8 @@ class Ui_MainWindow(object):
         self.xAxisAndYAxisGridLayout.addWidget(self.label, 2, 0, 1, 1)
         self.yAxisComboBox = QtWidgets.QComboBox(self.errorMapControlsGroupBox)
         self.yAxisComboBox.setObjectName("yAxisComboBox")
+        self.yAxisComboBox.addItem("")
+        self.yAxisComboBox.addItem("")
         self.yAxisComboBox.addItem("")
         self.yAxisComboBox.addItem("")
         self.xAxisAndYAxisGridLayout.addWidget(self.yAxisComboBox, 1, 2, 1, 1)
@@ -136,7 +115,7 @@ class Ui_MainWindow(object):
         self.gridLayout_2 = QtWidgets.QGridLayout(self.layoutWidget)
         self.gridLayout_2.setContentsMargins(0, 0, 0, 0)
         self.gridLayout_2.setObjectName("gridLayout_2")
-        self.extrapolationHorizontalSlider = Slider(self.layoutWidget)
+        self.extrapolationHorizontalSlider = QtWidgets.QSlider(self.layoutWidget)
         self.extrapolationHorizontalSlider.setMaximum(100)
         self.extrapolationHorizontalSlider.setOrientation(QtCore.Qt.Horizontal)
         self.extrapolationHorizontalSlider.setObjectName("extrapolationHorizontalSlider")
@@ -348,12 +327,16 @@ class Ui_MainWindow(object):
         MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
         self.errorMapControlsGroupBox.setTitle(_translate("MainWindow", "Error map controls"))
         self.xAxisLabel.setText(_translate("MainWindow", "X-axis"))
-        self.xAxisComboBox.setItemText(0, _translate("MainWindow", "Polynomial Order"))
-        self.xAxisComboBox.setItemText(1, _translate("MainWindow", "Overlapping Percentage"))
+        self.xAxisComboBox.setItemText(0, _translate("MainWindow", "Choose Axis Parameter"))
+        self.xAxisComboBox.setItemText(1, _translate("MainWindow", "Polynomial Order"))
+        self.xAxisComboBox.setItemText(2, _translate("MainWindow", "Number of Chunks"))
+        self.xAxisComboBox.setItemText(3, _translate("MainWindow", "Overlapping Percentage"))
         self.yAxisLabel.setText(_translate("MainWindow", "Y-axis"))
         self.label.setText(_translate("MainWindow", "Constant Parameter"))
-        self.yAxisComboBox.setItemText(0, _translate("MainWindow", "Number of Chunks"))
-        self.yAxisComboBox.setItemText(1, _translate("MainWindow", "Overlapping Percentage"))
+        self.yAxisComboBox.setItemText(0, _translate("MainWindow", "Choose Axis Parameter"))
+        self.yAxisComboBox.setItemText(1, _translate("MainWindow", "Polynomial Order"))
+        self.yAxisComboBox.setItemText(2, _translate("MainWindow", "Number of Chunks"))
+        self.yAxisComboBox.setItemText(3, _translate("MainWindow", "Overlapping Percentage"))
         self.startAndCancelErrorMapPushButton.setText(_translate("MainWindow", "Start"))
         self.pauseAndRezoomErrorMapPushButton.setText(_translate("MainWindow", "Pause"))
         self.mainGraphControlsGroupBox.setTitle(_translate("MainWindow", "Main Graph Controls"))
