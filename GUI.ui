@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1470</width>
-    <height>1044</height>
+    <width>1322</width>
+    <height>925</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -21,13 +21,24 @@
        <widget class="QComboBox" name="latexEquationComboBox"/>
       </item>
       <item row="0" column="0">
-       <widget class="QLineEdit" name="latexEquationLineEdit"/>
+       <widget class="QLabel" name="latexEquationLabel">
+        <property name="text">
+         <string/>
+        </property>
+       </widget>
       </item>
      </layout>
     </item>
     <item>
      <layout class="QGridLayout" name="mainGraphAndErrorMapGridLayout">
-      <item row="1" column="2">
+      <item row="0" column="0">
+       <widget class="PlotWidget" name="mainGraphGraphicsView">
+        <property name="styleSheet">
+         <string notr="true">background-color: rgb(0, 0, 0);</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="2">
        <layout class="QGridLayout" name="errorMapGridLayout">
         <item row="0" column="0">
          <widget class="PlotWidget" name="errorMapGraphicsView">
@@ -38,30 +49,7 @@
         </item>
        </layout>
       </item>
-      <item row="0" column="0">
-       <widget class="QLabel" name="latexEquationLabel">
-        <property name="text">
-         <string>Latex equation</string>
-        </property>
-       </widget>
-      </item>
-      <item row="2" column="0">
-       <spacer name="mainGraphHorizontalSpacer">
-        <property name="orientation">
-         <enum>Qt::Horizontal</enum>
-        </property>
-        <property name="sizeType">
-         <enum>QSizePolicy::Fixed</enum>
-        </property>
-        <property name="sizeHint" stdset="0">
-         <size>
-          <width>850</width>
-          <height>20</height>
-         </size>
-        </property>
-       </spacer>
-      </item>
-      <item row="1" column="1">
+      <item row="0" column="1">
        <spacer name="verticalSpacer_2">
         <property name="orientation">
          <enum>Qt::Vertical</enum>
@@ -71,48 +59,14 @@
         </property>
         <property name="sizeHint" stdset="0">
          <size>
-          <width>0</width>
+          <width>13</width>
           <height>300</height>
          </size>
         </property>
        </spacer>
       </item>
-      <item row="0" column="2">
-       <widget class="QLabel" name="errorLabel">
-        <property name="text">
-         <string>Error map</string>
-        </property>
-       </widget>
-      </item>
       <item row="1" column="0">
-       <widget class="PlotWidget" name="mainGraphGraphicsView">
-        <property name="styleSheet">
-         <string notr="true">background-color: rgb(0, 0, 0);</string>
-        </property>
-       </widget>
-      </item>
-     </layout>
-    </item>
-    <item>
-     <layout class="QGridLayout" name="gridLayout">
-      <item row="0" column="1">
-       <spacer name="verticalSpacer">
-        <property name="orientation">
-         <enum>Qt::Vertical</enum>
-        </property>
-        <property name="sizeType">
-         <enum>QSizePolicy::Fixed</enum>
-        </property>
-        <property name="sizeHint" stdset="0">
-         <size>
-          <width>20</width>
-          <height>500</height>
-         </size>
-        </property>
-       </spacer>
-      </item>
-      <item row="2" column="1">
-       <spacer name="horizontalSpacer_2">
+       <spacer name="mainGraphHorizontalSpacer">
         <property name="orientation">
          <enum>Qt::Horizontal</enum>
         </property>
@@ -121,13 +75,17 @@
         </property>
         <property name="sizeHint" stdset="0">
          <size>
-          <width>40</width>
+          <width>700</width>
           <height>20</height>
          </size>
         </property>
        </spacer>
       </item>
-      <item row="0" column="3">
+     </layout>
+    </item>
+    <item>
+     <layout class="QGridLayout" name="gridLayout">
+      <item row="0" column="2">
        <widget class="QGroupBox" name="errorMapControlsGroupBox">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
@@ -138,530 +96,460 @@
         <property name="title">
          <string>Error map controls</string>
         </property>
-        <widget class="QProgressBar" name="errorMapProgressBar">
-         <property name="geometry">
-          <rect>
-           <x>60</x>
-           <y>190</y>
-           <width>491</width>
-           <height>24</height>
-          </rect>
-         </property>
-         <property name="value">
-          <number>24</number>
-         </property>
-        </widget>
-        <widget class="QWidget" name="layoutWidget">
-         <property name="geometry">
-          <rect>
-           <x>60</x>
-           <y>30</y>
-           <width>491</width>
-           <height>117</height>
-          </rect>
-         </property>
-         <layout class="QGridLayout" name="xAxisAndYAxisGridLayout">
-          <item row="0" column="0">
-           <widget class="QLabel" name="xAxisLabel">
-            <property name="text">
-             <string>X-axis</string>
-            </property>
-            <property name="alignment">
-             <set>Qt::AlignCenter</set>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="2">
-           <widget class="QComboBox" name="xAxisComboBox">
-            <item>
-             <property name="text">
-              <string>Order of polynomial</string>
+        <layout class="QVBoxLayout" name="verticalLayout_2">
+         <item>
+          <layout class="QGridLayout" name="xAxisAndYAxisGridLayout">
+           <item row="0" column="4">
+            <spacer name="xAxisHorizontalSpacer">
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
              </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>Overlapping</string>
+             <property name="sizeType">
+              <enum>QSizePolicy::Fixed</enum>
              </property>
-            </item>
-           </widget>
-          </item>
-          <item row="1" column="0">
-           <widget class="QLabel" name="yAxisLabel">
-            <property name="text">
-             <string>Y-axis</string>
-            </property>
-            <property name="alignment">
-             <set>Qt::AlignCenter</set>
-            </property>
-           </widget>
-          </item>
-          <item row="2" column="0">
-           <widget class="QLabel" name="label">
-            <property name="text">
-             <string>Constant Parameter</string>
-            </property>
-            <property name="alignment">
-             <set>Qt::AlignCenter</set>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="2">
-           <widget class="QComboBox" name="yAxisComboBox">
-            <item>
-             <property name="text">
-              <string>Number of chunks</string>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>120</width>
+               <height>20</height>
+              </size>
              </property>
-            </item>
-            <item>
+            </spacer>
+           </item>
+           <item row="0" column="3">
+            <widget class="QComboBox" name="xAxisComboBox">
+             <item>
+              <property name="text">
+               <string>Choose Axis Parameter</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>Polynomial Order</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>Number of Chunks</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>Overlapping Percentage</string>
+              </property>
+             </item>
+            </widget>
+           </item>
+           <item row="3" column="1">
+            <widget class="QPushButton" name="startAndCancelErrorMapPushButton">
              <property name="text">
-              <string>Overlapping</string>
+              <string>Start</string>
              </property>
-            </item>
-           </widget>
-          </item>
-          <item row="0" column="3">
-           <spacer name="xAxisHorizontalSpacer">
-            <property name="orientation">
-             <enum>Qt::Horizontal</enum>
-            </property>
-            <property name="sizeType">
-             <enum>QSizePolicy::Fixed</enum>
-            </property>
-            <property name="sizeHint" stdset="0">
-             <size>
-              <width>120</width>
-              <height>20</height>
-             </size>
-            </property>
-           </spacer>
-          </item>
-          <item row="3" column="0">
-           <widget class="QPushButton" name="startAndCancelErrorMapPushButton">
-            <property name="text">
-             <string>Start</string>
-            </property>
-           </widget>
-          </item>
-          <item row="3" column="2">
-           <widget class="QPushButton" name="pauseAndRezoomErrorMapPushButton">
-            <property name="text">
-             <string>Pause</string>
-            </property>
-           </widget>
-          </item>
-          <item row="2" column="2">
-           <widget class="QSpinBox" name="spinBox"/>
-          </item>
-         </layout>
-        </widget>
+            </widget>
+           </item>
+           <item row="0" column="1">
+            <widget class="QLabel" name="xAxisLabel">
+             <property name="text">
+              <string>X-axis</string>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignCenter</set>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="3">
+            <widget class="QComboBox" name="yAxisComboBox">
+             <item>
+              <property name="text">
+               <string>Choose Axis Parameter</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>Polynomial Order</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>Number of Chunks</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>Overlapping Percentage</string>
+              </property>
+             </item>
+            </widget>
+           </item>
+           <item row="2" column="1">
+            <widget class="QLabel" name="label">
+             <property name="text">
+              <string>Constant Parameter</string>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignCenter</set>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="1">
+            <widget class="QLabel" name="yAxisLabel">
+             <property name="text">
+              <string>Y-axis</string>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignCenter</set>
+             </property>
+            </widget>
+           </item>
+           <item row="2" column="3">
+            <widget class="QSpinBox" name="spinBox"/>
+           </item>
+           <item row="3" column="3">
+            <widget class="QPushButton" name="pauseAndResumeErrorMapPushButton">
+             <property name="text">
+              <string>Pause</string>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="0">
+            <spacer name="horizontalSpacer">
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
+             </property>
+             <property name="sizeType">
+              <enum>QSizePolicy::Fixed</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>120</width>
+               <height>20</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+          </layout>
+         </item>
+         <item>
+          <widget class="QProgressBar" name="errorMapProgressBar">
+           <property name="value">
+            <number>24</number>
+           </property>
+          </widget>
+         </item>
+        </layout>
        </widget>
       </item>
-      <item row="0" column="0" rowspan="2">
+      <item row="0" column="0">
        <widget class="QGroupBox" name="mainGraphControlsGroupBox">
         <property name="title">
          <string>Main Graph Controls</string>
         </property>
-        <widget class="QWidget" name="">
-         <property name="geometry">
-          <rect>
-           <x>160</x>
-           <y>20</y>
-           <width>481</width>
-           <height>61</height>
-          </rect>
-         </property>
-         <layout class="QGridLayout" name="gridLayout_2">
-          <item row="0" column="0">
-           <widget class="QLabel" name="extrapolationLabel">
-            <property name="text">
-             <string>Extrapolation</string>
-            </property>
-            <property name="alignment">
-             <set>Qt::AlignCenter</set>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="1">
-           <widget class="QSlider" name="extrapolationHorizontalSlider">
-            <property name="maximum">
-             <number>100</number>
-            </property>
-            <property name="orientation">
-             <enum>Qt::Horizontal</enum>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="2">
-           <widget class="QLabel" name="extrapolationPercentageLabel">
-            <property name="text">
-             <string>0% Original Signal</string>
-            </property>
-            <property name="alignment">
-             <set>Qt::AlignCenter</set>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="0">
-           <widget class="QLabel" name="CurveFittingCoveragePrecentageLabel">
-            <property name="text">
-             <string>Signal curve fitting coverage</string>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="1">
-           <widget class="QLCDNumber" name="CurveFittingCoveragePrecentageLcdNumber"/>
-          </item>
-          <item row="1" column="2">
-           <widget class="QLabel" name="signalCoveragePrecentageLabel">
-            <property name="text">
-             <string>%</string>
-            </property>
-           </widget>
-          </item>
-         </layout>
-        </widget>
-        <widget class="QWidget" name="">
-         <property name="geometry">
-          <rect>
-           <x>10</x>
-           <y>100</y>
-           <width>865</width>
-           <height>401</height>
-          </rect>
-         </property>
-         <layout class="QGridLayout" name="gridLayout_3">
-          <item row="2" column="2">
-           <widget class="QSpinBox" name="polynomialFittingOrderSpinBox">
-            <property name="maximum">
-             <number>10</number>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="2">
-           <widget class="QLabel" name="polynomialFittingOrderLabel">
-            <property name="text">
-             <string>Fitting order</string>
-            </property>
-           </widget>
-          </item>
-          <item row="13" column="2">
-           <widget class="QPushButton" name="polynomialFitPushButton">
-            <property name="text">
-             <string>Fit</string>
-            </property>
-           </widget>
-          </item>
-          <item row="9" column="2">
-           <widget class="QLabel" name="polynomialOverlapLabel">
-            <property name="text">
-             <string>overlap</string>
-            </property>
-           </widget>
-          </item>
-          <item row="10" column="2">
-           <widget class="QSpinBox" name="polynomialOverlapSpinBox">
-            <property name="maximum">
-             <number>25</number>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="2">
-           <widget class="QRadioButton" name="polynomialRadioButton">
-            <property name="text">
-             <string>Polynomial</string>
-            </property>
-           </widget>
-          </item>
-          <item row="11" column="2">
-           <widget class="QRadioButton" name="polynomialConstantChunkRadioButton">
-            <property name="font">
-             <font>
-              <strikeout>false</strikeout>
-             </font>
-            </property>
-            <property name="text">
-             <string>Keep user input's number of chunks constant</string>
-            </property>
-            <property name="autoRepeat">
-             <bool>false</bool>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="0">
-           <widget class="QRadioButton" name="cubicRadioButton">
-            <property name="text">
-             <string>Cubic</string>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="1">
-           <widget class="QRadioButton" name="splineRadioButton">
-            <property name="text">
-             <string>Spline</string>
-            </property>
-           </widget>
-          </item>
-          <item row="3" column="2">
-           <widget class="QRadioButton" name="polynomialOneChunkRadioButton">
-            <property name="text">
-             <string>One Chunk</string>
-            </property>
-           </widget>
-          </item>
-          <item row="6" column="2">
-           <widget class="QSpinBox" name="polynomialNumberOfChunksSpinBox">
-            <property name="minimum">
-             <number>1</number>
-            </property>
-            <property name="maximum">
-             <number>20</number>
-            </property>
-           </widget>
-          </item>
-          <item row="8" column="2">
-           <widget class="QRadioButton" name="polynomialOverlappingRadioButton">
-            <property name="text">
-             <string>Overlapping</string>
-            </property>
-           </widget>
-          </item>
-          <item row="7" column="2">
-           <widget class="QRadioButton" name="polynomialNoOverlappingRadioButton">
-            <property name="text">
-             <string>No Overlapping</string>
-            </property>
-           </widget>
-          </item>
-          <item row="12" column="2">
-           <widget class="QRadioButton" name="polynomialFullCoverageRadioButton">
-            <property name="text">
-             <string>Keep 100% signal curve fitting coverage</string>
-            </property>
-           </widget>
-          </item>
-          <item row="4" column="2">
-           <widget class="QRadioButton" name="polynomialMultipleChunksRadioButton">
-            <property name="text">
-             <string>Multiple Chunks</string>
-            </property>
-           </widget>
-          </item>
-          <item row="5" column="2">
-           <widget class="QLabel" name="polynomialNumberOfChunksLabel">
-            <property name="text">
-             <string>Number of chunks</string>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="0">
-           <widget class="QRadioButton" name="cubicOneChunkRadioButton">
-            <property name="text">
-             <string>One Chunk</string>
-            </property>
-           </widget>
-          </item>
-          <item row="2" column="0">
-           <widget class="QRadioButton" name="cubicMultipleChunksRadioButton">
-            <property name="text">
-             <string>Multiple Chunks</string>
-            </property>
-           </widget>
-          </item>
-          <item row="3" column="0">
-           <widget class="QLabel" name="cubicNumberOfChunksLabel">
-            <property name="text">
-             <string>Number of Chunks</string>
-            </property>
-           </widget>
-          </item>
-          <item row="4" column="0">
-           <widget class="QSpinBox" name="cubicNumberOfChunksSpinBox">
-            <property name="minimum">
-             <number>1</number>
-            </property>
-            <property name="maximum">
-             <number>20</number>
-            </property>
-           </widget>
-          </item>
-          <item row="5" column="0">
-           <widget class="QRadioButton" name="cubicNoOverlappingRadioButton">
-            <property name="text">
-             <string>No Overlapping</string>
-            </property>
-           </widget>
-          </item>
-          <item row="6" column="0">
-           <widget class="QRadioButton" name="cubicOverlappingRadioButton">
-            <property name="text">
-             <string>Overlapping</string>
-            </property>
-           </widget>
-          </item>
-          <item row="7" column="0">
-           <widget class="QLabel" name="cubicOverlapLabel">
-            <property name="text">
-             <string>overlap</string>
-            </property>
-           </widget>
-          </item>
-          <item row="8" column="0">
-           <widget class="QSpinBox" name="cubicOverlapSpinBox">
-            <property name="maximum">
-             <number>25</number>
-            </property>
-           </widget>
-          </item>
-          <item row="9" column="0">
-           <widget class="QRadioButton" name="cubicConstantChunkRadioButton">
-            <property name="font">
-             <font>
-              <strikeout>false</strikeout>
-             </font>
-            </property>
-            <property name="text">
-             <string>Keep user input's number of chunks constant</string>
-            </property>
-            <property name="autoRepeat">
-             <bool>false</bool>
-            </property>
-           </widget>
-          </item>
-          <item row="10" column="0">
-           <widget class="QRadioButton" name="cubicFullCoverageRadioButton">
-            <property name="text">
-             <string>Keep 100% signal curve fitting coverage</string>
-            </property>
-           </widget>
-          </item>
-          <item row="11" column="0">
-           <widget class="QPushButton" name="cubicFitPushButton">
-            <property name="text">
-             <string>Fit</string>
-            </property>
-           </widget>
-          </item>
-          <item row="13" column="1">
-           <widget class="QPushButton" name="splineFitPushButton">
-            <property name="text">
-             <string>Fit</string>
-            </property>
-           </widget>
-          </item>
-          <item row="12" column="1">
-           <widget class="QRadioButton" name="splineFullCoverageRadioButton">
-            <property name="text">
-             <string>Keep 100% signal curve fitting coverage</string>
-            </property>
-           </widget>
-          </item>
-          <item row="11" column="1">
-           <widget class="QRadioButton" name="splineConstantChunkRadioButton">
-            <property name="font">
-             <font>
-              <strikeout>false</strikeout>
-             </font>
-            </property>
-            <property name="text">
-             <string>Keep user input's number of chunks constant</string>
-            </property>
-            <property name="autoRepeat">
-             <bool>false</bool>
-            </property>
-           </widget>
-          </item>
-          <item row="10" column="1">
-           <widget class="QSpinBox" name="splineOverlapSpinBox">
-            <property name="maximum">
-             <number>25</number>
-            </property>
-           </widget>
-          </item>
-          <item row="9" column="1">
-           <widget class="QLabel" name="splineOverlapLabel">
-            <property name="text">
-             <string>overlap</string>
-            </property>
-           </widget>
-          </item>
-          <item row="8" column="1">
-           <widget class="QRadioButton" name="splineOverlappingRadioButton">
-            <property name="text">
-             <string>Overlapping</string>
-            </property>
-           </widget>
-          </item>
-          <item row="7" column="1">
-           <widget class="QRadioButton" name="splineNoOverlappingRadioButton">
-            <property name="text">
-             <string>No Overlapping</string>
-            </property>
-           </widget>
-          </item>
-          <item row="6" column="1">
-           <widget class="QSpinBox" name="splineNumberOfChunksSpinBox">
-            <property name="minimum">
-             <number>1</number>
-            </property>
-            <property name="maximum">
-             <number>20</number>
-            </property>
-           </widget>
-          </item>
-          <item row="5" column="1">
-           <widget class="QLabel" name="splineNumberOfChunksLabel">
-            <property name="text">
-             <string>Number of Chunks</string>
-            </property>
-           </widget>
-          </item>
-          <item row="4" column="1">
-           <widget class="QRadioButton" name="splineMultipleChunksRadioButton">
-            <property name="text">
-             <string>Multiple Chunks</string>
-            </property>
-           </widget>
-          </item>
-          <item row="3" column="1">
-           <widget class="QRadioButton" name="splineOneChunkRadioButton">
-            <property name="text">
-             <string>One Chunk</string>
-            </property>
-           </widget>
-          </item>
-          <item row="2" column="1">
-           <widget class="QSpinBox" name="splineFittingOrderSpinBox">
-            <property name="maximum">
-             <number>10</number>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="1">
-           <widget class="QLabel" name="splineFittingOrderLabel">
-            <property name="text">
-             <string>Fitting order</string>
-            </property>
-           </widget>
-          </item>
-         </layout>
-        </widget>
+        <layout class="QVBoxLayout" name="verticalLayout_3">
+         <item>
+          <layout class="QGridLayout" name="gridLayout_2">
+           <item row="2" column="2">
+            <widget class="QLabel" name="signalCoveragePrecentageLabel">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="text">
+              <string>%</string>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="0">
+            <widget class="QLabel" name="precentageOfErrorLabel">
+             <property name="text">
+              <string>Percentage of Error</string>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignCenter</set>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="0">
+            <widget class="QLabel" name="extrapolationLabel">
+             <property name="text">
+              <string>Extrapolation</string>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignCenter</set>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="1" colspan="3">
+            <widget class="QSlider" name="extrapolationHorizontalSlider">
+             <property name="maximum">
+              <number>100</number>
+             </property>
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
+             </property>
+            </widget>
+           </item>
+           <item row="2" column="3">
+            <spacer name="verticalSpacer_3">
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
+             </property>
+             <property name="sizeType">
+              <enum>QSizePolicy::Fixed</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>50</width>
+               <height>10</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+           <item row="0" column="1">
+            <widget class="QLCDNumber" name="precentageOfErrorLcdNumber">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+               <horstretch>0</horstretch>
+               <verstretch>20</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="segmentStyle">
+              <enum>QLCDNumber::Flat</enum>
+             </property>
+            </widget>
+           </item>
+           <item row="2" column="1">
+            <widget class="QLCDNumber" name="CurveFittingCoveragePrecentageLcdNumber">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+               <horstretch>40</horstretch>
+               <verstretch>20</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="cursor">
+              <cursorShape>ArrowCursor</cursorShape>
+             </property>
+             <property name="focusPolicy">
+              <enum>Qt::NoFocus</enum>
+             </property>
+             <property name="layoutDirection">
+              <enum>Qt::LeftToRight</enum>
+             </property>
+             <property name="smallDecimalPoint">
+              <bool>false</bool>
+             </property>
+             <property name="segmentStyle">
+              <enum>QLCDNumber::Flat</enum>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="5">
+            <widget class="QLabel" name="extrapolationPercentageLabel">
+             <property name="text">
+              <string>0% Original Signal</string>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignCenter</set>
+             </property>
+            </widget>
+           </item>
+           <item row="2" column="0">
+            <widget class="QLabel" name="CurveFittingCoveragePrecentageLabel">
+             <property name="text">
+              <string>Signal curve fitting coverage</string>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignCenter</set>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="2">
+            <widget class="QLabel" name="precentageLabel">
+             <property name="text">
+              <string>%</string>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </item>
+         <item>
+          <layout class="QGridLayout" name="gridLayout_3">
+           <item row="2" column="4">
+            <widget class="QSpinBox" name="numberOfChunksSpinBox">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="minimum">
+              <number>1</number>
+             </property>
+             <property name="maximum">
+              <number>20</number>
+             </property>
+            </widget>
+           </item>
+           <item row="4" column="4">
+            <widget class="QRadioButton" name="overlappingRadioButton">
+             <property name="text">
+              <string>Overlapping</string>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="5">
+            <widget class="QLabel" name="overlapLabel">
+             <property name="text">
+              <string>Overlapping Percentage</string>
+             </property>
+            </widget>
+           </item>
+           <item row="5" column="3">
+            <widget class="QPushButton" name="fitPushButton">
+             <property name="text">
+              <string>Fit</string>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="4">
+            <widget class="QLabel" name="numberOfChunksLabel">
+             <property name="text">
+              <string>Number of chunks</string>
+             </property>
+            </widget>
+           </item>
+           <item row="3" column="4">
+            <widget class="QRadioButton" name="noOverlappingRadioButton">
+             <property name="text">
+              <string>No Overlapping</string>
+             </property>
+            </widget>
+           </item>
+           <item row="4" column="3">
+            <widget class="QRadioButton" name="multipleChunksRadioButton">
+             <property name="text">
+              <string>Multiple Chunks</string>
+             </property>
+            </widget>
+           </item>
+           <item row="2" column="3">
+            <widget class="QSpinBox" name="fittingOrderSpinBox">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+               <horstretch>50</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="maximum">
+              <number>10</number>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="3">
+            <widget class="QLabel" name="fittingOrderLabel">
+             <property name="text">
+              <string>Fitting order</string>
+             </property>
+            </widget>
+           </item>
+           <item row="3" column="3">
+            <widget class="QRadioButton" name="oneChunkRadioButton">
+             <property name="text">
+              <string>One Chunk</string>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="1">
+            <widget class="QLabel" name="label_2">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="text">
+              <string>Interpolation Methods</string>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignCenter</set>
+             </property>
+            </widget>
+           </item>
+           <item row="3" column="1">
+            <widget class="QRadioButton" name="cubicRadioButton">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="text">
+              <string>Cubic</string>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="1">
+            <widget class="QRadioButton" name="polynomialRadioButton">
+             <property name="text">
+              <string>Polynomial</string>
+             </property>
+            </widget>
+           </item>
+           <item row="2" column="1">
+            <widget class="QRadioButton" name="splineRadioButton">
+             <property name="text">
+              <string>Spline</string>
+             </property>
+            </widget>
+           </item>
+           <item row="3" column="5">
+            <widget class="QRadioButton" name="constantChunkRadioButton">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="font">
+              <font>
+               <strikeout>false</strikeout>
+              </font>
+             </property>
+             <property name="text">
+              <string>Keep user input's number of chunks constant</string>
+             </property>
+             <property name="autoRepeat">
+              <bool>false</bool>
+             </property>
+            </widget>
+           </item>
+           <item row="2" column="5">
+            <widget class="QSpinBox" name="overlapSpinBox">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="maximum">
+              <number>25</number>
+             </property>
+            </widget>
+           </item>
+           <item row="4" column="5">
+            <widget class="QRadioButton" name="fullCoverageRadioButton">
+             <property name="text">
+              <string>Keep 100% signal curve fitting coverage</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </item>
+        </layout>
        </widget>
-      </item>
-      <item row="2" column="0">
-       <spacer name="horizontalSpacer">
-        <property name="orientation">
-         <enum>Qt::Horizontal</enum>
-        </property>
-        <property name="sizeType">
-         <enum>QSizePolicy::Fixed</enum>
-        </property>
-        <property name="sizeHint" stdset="0">
-         <size>
-          <width>880</width>
-          <height>20</height>
-         </size>
-        </property>
-       </spacer>
       </item>
      </layout>
     </item>
@@ -672,7 +560,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1470</width>
+     <width>1322</width>
      <height>26</height>
     </rect>
    </property>
@@ -687,7 +575,7 @@
   <widget class="QStatusBar" name="statusbar"/>
   <action name="openAction">
    <property name="icon">
-    <iconset resource="../../../../../images.qrc">
+    <iconset resource="../../../../../../images.qrc">
      <normaloff>:/image/icons/open.png</normaloff>:/image/icons/open.png</iconset>
    </property>
    <property name="text">
@@ -706,7 +594,7 @@
   </customwidget>
  </customwidgets>
  <resources>
-  <include location="../../../../../images.qrc"/>
+  <include location="../../../../../../images.qrc"/>
  </resources>
  <connections/>
 </ui>
