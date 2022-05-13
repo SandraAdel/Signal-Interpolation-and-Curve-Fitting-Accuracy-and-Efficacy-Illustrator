@@ -23,9 +23,9 @@ import matplotlib.image as mpimg
 from sympy import S, symbols, printing
 from PyQt5.QtGui import QIcon, QPixmap
 from io import BytesIO
+from tkinter import messagebox as mbox
 
 
-# Sandra's Addition: Threading related
 class WorkerSignals(QObject):
     started = pyqtSignal()
     finished = pyqtSignal()
@@ -75,7 +75,7 @@ class Worker(QRunnable):
                     self.signals.progress.emit(round(current_progress))
                     # FOR PAUSING
                     # REMOVE LATER
-                    #time.sleep(0.05)                   
+                    time.sleep(0.01)                   
                     while self.is_paused:
                         time.sleep(0)
                     if self.is_stopped:
@@ -83,6 +83,7 @@ class Worker(QRunnable):
 
                     if self.x_axis_parameter == 'Number of Chunks':
                         column_index += 1
+
                     elif self.y_axis_parameter == 'Number of Chunks':
                         row_index -= 1
                 if self.x_axis_parameter == 'Number of Chunks':
@@ -120,6 +121,8 @@ class MainWindow(QMainWindow):
         self.ui.setupUi(self)
 
         # Variables Initialization
+        self.TimeReadings = []
+        self.AmplitudeReadings = []
         self.signalPoint = 1000
         self.chunkSize = 0
         self.oneChunk = 0
@@ -129,8 +132,6 @@ class MainWindow(QMainWindow):
         self.chunkNumber = 1
         self.ui.numberOfChunksSpinBox.setValue(1)
         self.showAndHide('all')
-        
-        # Sandra's Addition
         self.number_of_readings  = 1000
         self.prioritizing_constant_number_of_chunks_over_signal_interpolation_coverage = False
         self.signal_curve_fitting_coverage = None
@@ -161,8 +162,6 @@ class MainWindow(QMainWindow):
         self.ui.extrapolationHorizontalSlider.valueChanged.connect(lambda: self.equation())
         self.ui.latexEquationComboBox.currentIndexChanged.connect(lambda: self.equation())
 
-
-
     # Methods
     def OpenFile(self):
         self.file_name = QtWidgets.QFileDialog.getOpenFileName(caption="Choose Signal", directory="", filter="csv (*.csv)")[0]
@@ -172,8 +171,7 @@ class MainWindow(QMainWindow):
         self.ui.mainGraphGraphicsView.clear()
         self.ui.mainGraphGraphicsView.setYRange(min(self.AmplitudeReadings), max(self.AmplitudeReadings))
         self.ui.mainGraphGraphicsView.plot(self.TimeReadings, self.AmplitudeReadings, pen=pyqtgraph.mkPen('b', width=1.5))
-            
-    #! COODE REPETITION TACK CAAAAAAAAAAAAAAARE 
+ 
     def interpolationMethodsRadioButton(self):
         if self.ui.polynomialRadioButton.isChecked():
             self.interpolationKind = 'Polynomial'
@@ -187,8 +185,7 @@ class MainWindow(QMainWindow):
             self.interpolationKind = 'Cubic'
             self.showAndHide(self.interpolationKind)
             self.setSpinBox('Polynomial', False)
-
-            
+        
     def multipleChunksRadioButton (self):
         if self.ui.multipleChunksRadioButton.isChecked():
             self.isMultiple = True
@@ -196,7 +193,8 @@ class MainWindow(QMainWindow):
             self.ui.numberOfChunksLabel.show()
             self.ui.numberOfChunksSpinBox.show()
             self.ui.overlappingRadioButton.show()
-   
+            self.ui.noOverlappingRadioButton.show()
+              
     def oneChunkRadioButton (self):
         if self.ui.oneChunkRadioButton.isChecked():
             self.isMultiple = False
@@ -212,14 +210,12 @@ class MainWindow(QMainWindow):
             self.ui.fullCoverageRadioButton.hide()
             self.ui.constantChunkRadioButton.hide()
 
-
     def OverlapRadioButton(self):
         if self.ui.overlappingRadioButton.isChecked():
             self.ui.overlapSpinBox.show()
             self.ui.overlapLabel.show()
             self.ui.fullCoverageRadioButton.show()
             self.ui.constantChunkRadioButton.show()
-            self.ui.noOverlappingRadioButton.show()
 
     def noOverlapRadioButton(self):
         if self.ui.noOverlappingRadioButton.isChecked():
@@ -265,8 +261,8 @@ class MainWindow(QMainWindow):
             self.ui.fitPushButton.show()
             self.ui.fittingOrderLabel.show()
             self.ui.fittingOrderSpinBox.show()
+            self.ui.oneChunkRadioButton.show()
 
-            self.ui.oneChunkRadioButton.hide()
             self.ui.numberOfChunksLabel.hide()
             self.ui.numberOfChunksSpinBox.hide()
             self.ui.overlapSpinBox.hide()
@@ -322,6 +318,7 @@ class MainWindow(QMainWindow):
             self.ui.signalCoveragePrecentageLabel.hide()
             self.ui.errorMapGraphicsView.hide()
             self.ui.errorMapProgressBar.hide()
+
         elif show == 'Error map hide':
             self.ui.errorMapGraphicsView.hide()
             self.ui.errorMapProgressBar.hide()
@@ -329,59 +326,98 @@ class MainWindow(QMainWindow):
             self.ui.errorMapGraphicsView.show()
             self.ui.errorMapProgressBar.show()
 
-
     def xAxis(self):
+        currentYText = self.ui.yAxisComboBox.currentText()
+
         if self.ui.xAxisComboBox.currentText() == 'Choose Axis Parameter':
             self.ui.yAxisComboBox.clear()
-            yAxisList = ["Polynomial Order", "Number of Chunks", "Overlapping Percentage", "Choose Axis Parameter"]
+            yAxisList = ["Choose Axis Parameter", "Number of Chunks", "Polynomial Order", "Overlapping Percentage"]
             self.ui.yAxisComboBox.addItems(yAxisList)
+            self.ui.yAxisComboBox.setCurrentText(currentYText)
+
         elif self.ui.xAxisComboBox.currentText() == 'Polynomial Order':
             self.ui.yAxisComboBox.clear()
-            yAxisList = ["Number of Chunks", "Overlapping Percentage", "Choose Axis Parameter"]
+            yAxisList = ["Choose Axis Parameter", "Number of Chunks", "Overlapping Percentage"]
             self.ui.yAxisComboBox.addItems(yAxisList)
+            self.ui.yAxisComboBox.setCurrentText(currentYText)
+
         elif self.ui.xAxisComboBox.currentText() == 'Number of Chunks':
             self.ui.yAxisComboBox.clear()
-            yAxisList = ["Polynomial Order", "Overlapping Percentage", "Choose Axis Parameter"]
+            yAxisList = ["Choose Axis Parameter", "Polynomial Order", "Overlapping Percentage"]
             self.ui.yAxisComboBox.addItems(yAxisList)
+            self.ui.yAxisComboBox.setCurrentText(currentYText)
+
         elif self.ui.xAxisComboBox.currentText() == 'Overlapping Percentage':
             self.ui.yAxisComboBox.clear()
-            yAxisList = ["Polynomial Order", "Number of Chunks", "Choose Axis Parameter"]
-            self.ui.yAxisComboBox.addItems(yAxisList) 
+            yAxisList = ["Choose Axis Parameter", "Number of Chunks", "Polynomial Order"]
+            self.ui.yAxisComboBox.addItems(yAxisList)
+            self.ui.yAxisComboBox.setCurrentText(currentYText)
+
+        self.ConstantParameterSetting()
 
     def yAxis(self):
+        currentXText = self.ui.xAxisComboBox.currentText()
+
         if self.ui.yAxisComboBox.currentText() == 'Choose Axis Parameter':
             self.ui.xAxisComboBox.clear()
-            xAxisList = ["Polynomial Order", "Number of Chunks", "Overlapping Percentage", "Choose Axis Parameter"]
+            xAxisList = ["Choose Axis Parameter", "Number of Chunks", "Polynomial Order", "Overlapping Percentage"]
             self.ui.xAxisComboBox.addItems(xAxisList)
+            self.ui.xAxisComboBox.setCurrentText(currentXText)
+
         elif self.ui.yAxisComboBox.currentText() == 'Polynomial Order':
             self.ui.xAxisComboBox.clear()
-            xAxisList = ["Number of Chunks", "Overlapping Percentage", "Choose Axis Parameter"]
+            xAxisList = ["Choose Axis Parameter", "Number of Chunks", "Overlapping Percentage"]
             self.ui.xAxisComboBox.addItems(xAxisList)
+            self.ui.xAxisComboBox.setCurrentText(currentXText)
+
         elif self.ui.yAxisComboBox.currentText() == 'Number of Chunks':
             self.ui.xAxisComboBox.clear()
-            xAxisList = ["Polynomial Order", "Overlapping Percentage", "Choose Axis Parameter"]
+            xAxisList = ["Choose Axis Parameter", "Polynomial Order", "Overlapping Percentage"]
             self.ui.xAxisComboBox.addItems(xAxisList)
+            self.ui.xAxisComboBox.setCurrentText(currentXText)
+
         elif self.ui.yAxisComboBox.currentText() == 'Overlapping Percentage':
             self.ui.xAxisComboBox.clear()
-            xAxisList = ["Polynomial Order", "Number of Chunks", "Choose Axis Parameter"]
+            xAxisList = ["Choose Axis Parameter", "Number of Chunks", "Polynomial Order"]
             self.ui.xAxisComboBox.addItems(xAxisList) 
-        
-    
+            self.ui.xAxisComboBox.setCurrentText(currentXText)
+
+        self.ConstantParameterSetting()
+
+    def ConstantParameterSetting(self):
+        if (self.ui.xAxisComboBox.currentText() == "Number of Chunks" and self.ui.yAxisComboBox.currentText() == "Polynomial Order") or (self.ui.xAxisComboBox.currentText() == "Polynomial Order" and self.ui.yAxisComboBox.currentText() == "Number of Chunks"):
+            self.ui.label.setText("Overlapping Percentage")
+            self.ui.spinBox.setMinimum(0)
+            self.ui.spinBox.setMaximum(25)
+            self.ui.spinBox.setValue(0)
+        elif (self.ui.xAxisComboBox.currentText() == "Number of Chunks" and self.ui.yAxisComboBox.currentText() == "Overlapping Percentage") or (self.ui.xAxisComboBox.currentText() == "Overlapping Percentage" and self.ui.yAxisComboBox.currentText() == "Number of Chunks"):
+            self.ui.label.setText("Polynomial Order")
+            self.ui.spinBox.setMinimum(0)
+            self.ui.spinBox.setMaximum(10)
+            self.ui.spinBox.setValue(0)
+        elif (self.ui.xAxisComboBox.currentText() == "Polynomial Order" and self.ui.yAxisComboBox.currentText() == "Overlapping Percentage") or (self.ui.xAxisComboBox.currentText() == "Overlapping Percentage" and self.ui.yAxisComboBox.currentText() == "Polynomial Order"):
+            self.ui.label.setText("Number of Chunks")
+            self.ui.spinBox.setMinimum(1)
+            self.ui.spinBox.setMaximum(20)
+            self.ui.spinBox.setValue(1)
+            
     def keepConstantChunkRadioButton(self):
         if self.ui.constantChunkRadioButton.isChecked(): 
-            self.ShowPopUpMessage("Signal curve fitting coverage may not be 100%.") 
+            self.ShowPopUpMessage("Waring: Signal curve fitting coverage may not be 100%.", 'WARING!') 
             self.prioritizing_constant_number_of_chunks_over_signal_interpolation_coverage = True
         
-
     def FullCoverageRadioButton(self):
         if self.ui.fullCoverageRadioButton.isChecked(): 
-            self.ShowPopUpMessage("User input's number of chunks may not be kept constant.")
+            self.ShowPopUpMessage("Waring: User input's number of chunks may not be kept constant.", 'WARING!')
             self.prioritizing_constant_number_of_chunks_over_signal_interpolation_coverage = False 
 
-
-    def ShowPopUpMessage(self, popUpMessage):
-            messageBoxElement = QMessageBox.warning(self, 'WARING!', popUpMessage) 
-    
+    def ShowPopUpMessage(self, popUpMessage, type):
+            if type == 'WARING!':
+                messageBoxElement = QMessageBox.warning(self, type, popUpMessage) 
+            elif type == 'ERROR!':
+                # mbox.showerror('Spline Error Message', popUpMessage)  
+                messageBoxElement = QMessageBox.warning(self, 'ERROR!', popUpMessage) 
+   
     def setSpinBox(self, kind, one):
         if kind == 'Polynomial'and one == True:
             self.ui.overlapSpinBox.setValue(0)
@@ -402,33 +438,6 @@ class MainWindow(QMainWindow):
             self.ui.overlapSpinBox.setValue(0)
             self.ui.numberOfChunksSpinBox.setValue(1)
             self.ui.fittingOrderSpinBox.setValue(0)
-
-
-
-    #!################################################################################
-    def interpolationPolynomial (self):
-        self.chunckSize = ceil(1000/self.ui.numberOfChunksSpinBox.value())
-        # print(self.chunckSize)
-        self.order = self.ui.fittingOrderSpinBox.value()
-        self.ui.mainGraphGraphicsView.clear()
-        # overall point 1001 one empty 
-        for i in range(0,len(self.TimeReadings)-1,self.chunckSize):
-            amplitude = []
-            time = []
-            increment = i
-            for j in range(self.chunckSize-1):
-                if increment < len(self.TimeReadings):
-                    amplitude.append(self.AmplitudeReadings[increment])
-                    time.append(self.TimeReadings[increment])
-                    increment += 1
-            self.coeff = np.polyfit(time[0:int(self.chunckSize-1)], amplitude[0:int(self.chunckSize-1)],self.order)
-            self.poly1d_fn = np.poly1d(self.coeff) 
-            #! COODE REPETITION TACK CAAAAAAAAAAAAAAARE
-            self.ui.mainGraphGraphicsView.plot(self.TimeReadings, self.AmplitudeReadings, pen=pyqtgraph.mkPen('b', width=1.5))
-            self.ui.mainGraphGraphicsView.plot(time, self.poly1d_fn(time), pen=pyqtgraph.mkPen('g', width=1.5, style = QtCore.Qt.DotLine))
-        interpolated_curve_readings, curve_fitting_MSE = self.CurveFitFunctionality(self.ui.numberOfChunksSpinBox.value(),self.ui.overlapSpinBox.value(),'Polynomial',self.order,True)
-        print(interpolated_curve_readings)
-        print(curve_fitting_MSE)
 
     def extrapolation(self):
         self.extrapolationSliderValue = self.ui.extrapolationHorizontalSlider.value()
@@ -458,18 +467,6 @@ class MainWindow(QMainWindow):
         self.Canvas = FigureCanvas(self.figure)
         self.ui.errorMapGridLayout.addWidget(self.Canvas,0, 0, 1, 1)
 
-    def interpolationSpline(self):
-        self.ui.mainGraphGraphicsView.clear()
-        self.ui.mainGraphGraphicsView.plot(self.TimeReadings, self.AmplitudeReadings, pen=pyqtgraph.mkPen('b', width=1.5))
-        interpolated_curve_readings, curve_fitting_MSE = self.CurveFitFunctionality(self.ui.numberOfChunksSpinBox.value(),self.ui.overlapSpinBox.value(),'Spline', self.ui.fittingOrderSpinBox.value(), True)
-        self.CurveFittingCoverageCalculation(interpolated_curve_readings)
-
-    def interpolationCubic(self):
-        self.ui.mainGraphGraphicsView.clear()
-        self.ui.mainGraphGraphicsView.plot(self.TimeReadings, self.AmplitudeReadings, pen=pyqtgraph.mkPen('b', width=1.5))
-        interpolated_curve_readings, curve_fitting_MSE = self.CurveFitFunctionality(self.ui.numberOfChunksSpinBox.value(),self.ui.overlapSpinBox.value(),'Cubic', 'cubic', True)
-        self.CurveFittingCoverageCalculation(interpolated_curve_readings)
-    
     def chunkEquations(self, chunkNumber):
         count = 0
         self.chunckSize = ceil(1000/self.ui.numberOfChunksSpinBox.value())
@@ -489,7 +486,6 @@ class MainWindow(QMainWindow):
             if count == chunkNumber:
                 return self.coeff
 
-
     def interpolationMethods(self):
         if self.interpolationKind == 'Polynomial':
             self.ui.mainGraphGraphicsView.clear()
@@ -503,15 +499,19 @@ class MainWindow(QMainWindow):
         elif self.interpolationKind == 'Spline':
             self.ui.mainGraphGraphicsView.clear()
             self.ui.mainGraphGraphicsView.plot(self.TimeReadings, self.AmplitudeReadings, pen=pyqtgraph.mkPen('b', width=1.5))
+            if self.ui.fittingOrderSpinBox.value() % 2 == 0 and self.ui.fittingOrderSpinBox.value() != 2 :
+                self.ShowPopUpMessage("Error: Spline degree must be odd number or 2 \n Please enter an odd number",'ERROR!')
+                self.ui.fittingOrderSpinBox.setValue(1)
             interpolated_curve_readings, curve_fitting_MSE = self.CurveFitFunctionality(self.ui.numberOfChunksSpinBox.value(),self.ui.overlapSpinBox.value(),'Spline', self.ui.fittingOrderSpinBox.value(), True)
-            self.CurveFittingCoverageCalculation(interpolated_curve_readings)           
+            self.CurveFittingCoverageCalculation(interpolated_curve_readings)  
+            self.ui.precentageOfErrorLcdNumber.display(round(curve_fitting_MSE, 2))         
         elif self.interpolationKind == 'Cubic':
             self.ui.mainGraphGraphicsView.clear()
             self.ui.mainGraphGraphicsView.plot(self.TimeReadings, self.AmplitudeReadings, pen=pyqtgraph.mkPen('b', width=1.5))
             interpolated_curve_readings, curve_fitting_MSE = self.CurveFitFunctionality(self.ui.numberOfChunksSpinBox.value(),self.ui.overlapSpinBox.value(),'Cubic', 'cubic', True)
             self.CurveFittingCoverageCalculation(interpolated_curve_readings)
+            self.ui.precentageOfErrorLcdNumber.display(round(curve_fitting_MSE, 2))
 
-    # Sandra's Addition
     def CurveFitFunctionality(self, numberOfChuncks, percentageOfOverlapping, InterpolationKind, InterpolationParameter, plot):
 
         time_chuncks, signal_chuncks = self.DivisionOfSignalIntoChunksWithOrWithoutOverlapping(numberOfChuncks, percentageOfOverlapping)
@@ -521,9 +521,7 @@ class MainWindow(QMainWindow):
 
     def CurveFittingCoverageCalculation(self, interpolated_curve_readings):
         self.signal_curve_fitting_coverage = round( (len(interpolated_curve_readings) / self.number_of_readings) * 100 )
-        # FARAH: YOU CAN SET THE LCD HERE 3ALATOOL AND CHANGE FUNCTION NAME ACCORDINGLY MEN8EER MA TRAGA3i 7AGA
         self.ui.CurveFittingCoveragePrecentageLcdNumber.display(self.signal_curve_fitting_coverage)
-
 
     def DerivedSignalParametersCalculation(self, numberOfChuncks, percentageOfOverlapping):
         percentageOfOverlapping = round(percentageOfOverlapping/100, 2)
@@ -564,7 +562,6 @@ class MainWindow(QMainWindow):
             for i in range(numberOfChuncks):
                 interpolated_curve_readings.extend(curve_fitting_functions[i](time_chuncks[i]))
                 if plot:
-                    # FARAH: PLOTTING COMMAND. EDIT IT AS YOU LIKE
                     self.ui.mainGraphGraphicsView.plot(time_chuncks[i], curve_fitting_functions[i](time_chuncks[i]), pen=pyqtgraph.mkPen('r', width=1.5))
                     pass
         else:
@@ -576,7 +573,6 @@ class MainWindow(QMainWindow):
                 left_chunk = right_chunk[overlapping_range:]
             interpolated_curve_readings.extend(left_chunk)
             if plot:
-                # FARAH: PLOTTING COMMAND. EDIT IT AS YOU LIKE
                 self.ui.mainGraphGraphicsView.plot(self.TimeReadings[:len(interpolated_curve_readings)], interpolated_curve_readings, pen=pyqtgraph.mkPen('r', width=1.5))
                 pass
         # percentage error calculation
@@ -589,7 +585,7 @@ class MainWindow(QMainWindow):
     def startThreadRunner(self):
         # Create a runner
         if not self.threadRunning:
-            self.worker = Worker(self, self.ui.xAxisComboBox.currentText(), self.ui.yAxisComboBox.currentText(), 5)
+            self.worker = Worker(self, self.ui.xAxisComboBox.currentText(), self.ui.yAxisComboBox.currentText(), self.ui.spinBox.value())
             self.threadPaused = False
             self.worker.signals.progress.connect(self.reportProgress)
             self.worker.signals.started.connect(self.start)
@@ -646,8 +642,6 @@ class MainWindow(QMainWindow):
             self.worker.stop()
 
     def render_latex(self,formula, fontsize=12, dpi=300, format_='svg'):
-        """Renders LaTeX formula into image.
-        """
         fig = plt.figure(figsize=(0.01, 0.01))
         fig.text(0, 0, u'${}$'.format(formula), color='black',fontsize=fontsize)
         buffer_ = BytesIO()
@@ -680,8 +674,6 @@ class MainWindow(QMainWindow):
             self.ui.latexEquationLabel.setPixmap(qp)
 
 
-
-    # Sandra's Addition: General Function
 def GetDictionaryByKeyValuePair(dictionaries_list, key_to_search_by, value_to_search_by):
         dictionary_to_find = {}
         for dictionary in dictionaries_list:

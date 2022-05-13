@@ -398,6 +398,9 @@
              <property name="text">
               <string>Overlapping</string>
              </property>
+             <attribute name="buttonGroup">
+              <string notr="true">buttonGroup_3</string>
+             </attribute>
             </widget>
            </item>
            <item row="1" column="5">
@@ -426,6 +429,9 @@
              <property name="text">
               <string>No Overlapping</string>
              </property>
+             <attribute name="buttonGroup">
+              <string notr="true">buttonGroup_3</string>
+             </attribute>
             </widget>
            </item>
            <item row="4" column="3">
@@ -433,6 +439,9 @@
              <property name="text">
               <string>Multiple Chunks</string>
              </property>
+             <attribute name="buttonGroup">
+              <string notr="true">buttonGroup_2</string>
+             </attribute>
             </widget>
            </item>
            <item row="2" column="3">
@@ -460,6 +469,9 @@
              <property name="text">
               <string>One Chunk</string>
              </property>
+             <attribute name="buttonGroup">
+              <string notr="true">buttonGroup_2</string>
+             </attribute>
             </widget>
            </item>
            <item row="0" column="1">
@@ -489,6 +501,9 @@
              <property name="text">
               <string>Cubic</string>
              </property>
+             <attribute name="buttonGroup">
+              <string notr="true">buttonGroup</string>
+             </attribute>
             </widget>
            </item>
            <item row="1" column="1">
@@ -496,6 +511,9 @@
              <property name="text">
               <string>Polynomial</string>
              </property>
+             <attribute name="buttonGroup">
+              <string notr="true">buttonGroup</string>
+             </attribute>
             </widget>
            </item>
            <item row="2" column="1">
@@ -503,6 +521,9 @@
              <property name="text">
               <string>Spline</string>
              </property>
+             <attribute name="buttonGroup">
+              <string notr="true">buttonGroup</string>
+             </attribute>
             </widget>
            </item>
            <item row="3" column="5">
@@ -524,6 +545,9 @@
              <property name="autoRepeat">
               <bool>false</bool>
              </property>
+             <attribute name="buttonGroup">
+              <string notr="true">buttonGroup_4</string>
+             </attribute>
             </widget>
            </item>
            <item row="2" column="5">
@@ -544,6 +568,12 @@
              <property name="text">
               <string>Keep 100% signal curve fitting coverage</string>
              </property>
+             <property name="checked">
+              <bool>true</bool>
+             </property>
+             <attribute name="buttonGroup">
+              <string notr="true">buttonGroup_4</string>
+             </attribute>
             </widget>
            </item>
           </layout>
@@ -597,4 +627,10 @@
   <include location="../../../../../../images.qrc"/>
  </resources>
  <connections/>
+ <buttongroups>
+  <buttongroup name="buttonGroup_2"/>
+  <buttongroup name="buttonGroup"/>
+  <buttongroup name="buttonGroup_3"/>
+  <buttongroup name="buttonGroup_4"/>
+ </buttongroups>
 </ui>
