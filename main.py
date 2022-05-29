@@ -1,8 +1,14 @@
-
+import logging
 import sys; from math import ceil; import numpy as np; import pandas as pd; import matplotlib.pyplot as plt; import seaborn as sns; from re import T; from io import BytesIO
 from PyQt5 import QtCore, QtWidgets; from PyQt5.QtWidgets import QApplication, QMainWindow, QMessageBox; from PyQt5.QtGui import QPixmap; from sympy import S, symbols, printing
 from scipy.interpolate import make_interp_spline; from scipy.interpolate import interp1d; from sklearn.metrics import mean_squared_error; from PyQt5.QtCore import QThreadPool
 import pyqtgraph; from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas; from GUI import Ui_MainWindow; from ErrorMapWorker import *
+
+logger = logging.getLogger()
+logger.setLevel(logging.INFO)
+logging.basicConfig(format='%(asctime)s %(levelname)-8s [%(filename)s:%(lineno)d] %(message)s',
+                    datefmt='%d-%m-%Y:%H:%M:%S',
+                    filename='Logging.txt')
 
 class MainWindow(QMainWindow):
 
@@ -35,7 +41,8 @@ class MainWindow(QMainWindow):
         self.TimeReadings, self.AmplitudeReadings = self.data_frame.iloc[:,0].to_numpy(), self.data_frame.iloc[:,1].to_numpy()
         self.ui.mainGraphGraphicsView.clear(); self.ui.mainGraphGraphicsView.setYRange(min(self.AmplitudeReadings), max(self.AmplitudeReadings))
         self.ui.mainGraphGraphicsView.plot(self.TimeReadings, self.AmplitudeReadings, pen=pyqtgraph.mkPen('b', width=1.5))
- 
+        logging.info('User opening a File')
+
     def interpolationMethodsRadioButton(self):
         if self.ui.polynomialRadioButton.isChecked(): self.SetInterpolationMethod('Polynomial')
         elif self.ui.splineRadioButton.isChecked(): self.SetInterpolationMethod('Spline')
@@ -47,10 +54,12 @@ class MainWindow(QMainWindow):
     def ChunksNumberRadioButtonsCheck(self):
         if self.ui.multipleChunksRadioButton.isChecked(): self.ui.oneChunkRadioButton.show(); self.isMultiple = True; self.ShowAndHideOverlapOrChunksNumberSettings("show", self.chunksNumberSettings)
         elif self.ui.oneChunkRadioButton.isChecked(): self.setSpinBox(True); self.isMultiple = False; self.ShowAndHideOverlapOrChunksNumberSettings("hide", self.overlapSettings); self.ShowAndHideOverlapOrChunksNumberSettings("hide", self.chunksNumberSettings)
-              
+        logging.info('Choosing multiple chunks')
+
     def OverlapRadioButtonsCheck(self):
         if self.ui.overlappingRadioButton.isChecked(): self.ShowAndHideOverlapOrChunksNumberSettings("show", self.overlapSettings)
         elif self.ui.noOverlappingRadioButton.isChecked(): self.ShowAndHideOverlapOrChunksNumberSettings("hide", self.overlapSettings)
+        logging.info('Choosing overlapping')
 
     def ShowAndHideOverlapOrChunksNumberSettings(self, displayMethod, overlapOrChunksNumberSettings):
         for overlapOrChunksNumberSettings in overlapOrChunksNumberSettings:
@@ -68,6 +77,7 @@ class MainWindow(QMainWindow):
     def ErrorMapAxesComboBoxesSetter(self, axisType):
         if axisType == "X-Axis": self.ErrorMapAxesComboBoxesHelperFunction(self.ui.xAxisComboBox, self.ui.yAxisComboBox)
         elif axisType == "Y-Axis": self.ErrorMapAxesComboBoxesHelperFunction(self.ui.yAxisComboBox, self.ui.xAxisComboBox)
+        logging.info('Choosing axes for the error map')
 
     def ErrorMapAxesComboBoxesHelperFunction(self, currentAxisComboBox, otherAxisComboBox):
         otherAxisText, currentAxisText = otherAxisComboBox.currentText(), currentAxisComboBox.currentText()
@@ -83,6 +93,7 @@ class MainWindow(QMainWindow):
     def FullFittingCoverageAndConstantChunksNumberSettings(self):
         if self.ui.constantChunkRadioButton.isChecked(): messageBoxElement = QMessageBox.warning(self, 'Warning!', "Signal Curve Fitting Coverage may not be 100%.\nThis applies to Curve Fitting Functionality as well as Error Map Calculation (Polynomial Case)."); self.prioritizing_constant_number_of_chunks_over_signal_interpolation_coverage = True
         elif self.ui.fullCoverageRadioButton.isChecked(): messageBoxElement = QMessageBox.warning(self, 'Warning!', "User Input's Number of Chunks may not be kept Constant.\nThis applies to Curve Fitting Functionality as well as Error Map Calculation (Polynomial Case)."); self.prioritizing_constant_number_of_chunks_over_signal_interpolation_coverage = False
+        logging.info('Showing error messages according to overlap settings chosen')
 
     def setSpinBox(self, one):
         spinBoxSettings = GetDictionaryByKeyValuePair(self.spinBoxesInitializationList, 'One Chunk Case', one)
@@ -98,6 +109,7 @@ class MainWindow(QMainWindow):
         self.coeff = np.polyfit(time, amplitude,self.order); self.poly1d_fn, extrapolatedAmplitude = np.poly1d(self.coeff), np.polyval(self.coeff, residualTime)  
         self.ui.mainGraphGraphicsView.clear(); self.ui.mainGraphGraphicsView.plot(self.TimeReadings, self.AmplitudeReadings, pen=pyqtgraph.mkPen('b', width=1.5))
         self.ui.mainGraphGraphicsView.plot(time, self.poly1d_fn(time), pen=pyqtgraph.mkPen('g', width=1.5, style = QtCore.Qt.DotLine)); self.ui.mainGraphGraphicsView.plot(residualTime, extrapolatedAmplitude, pen=pyqtgraph.mkPen('r', width=1.5, style = QtCore.Qt.DotLine))
+        logging.info('Using the extrapolation slider')
 
     def clearErrorMap(self):
         self.figure = plt.figure(figsize=(15,5)); self.axes = self.figure.get_axes()
@@ -111,6 +123,7 @@ class MainWindow(QMainWindow):
                 if increment < len(self.TimeReadings): amplitude.append(self.AmplitudeReadings[increment]); time.append(self.TimeReadings[increment]); increment += 1
             self.coeff = np.polyfit(time[0:int(self.chunckSize-1)], amplitude[0:int(self.chunckSize-1)],self.order)
             if count == chunkNumber: return self.coeff
+        logging.info('Showing each chunk equation')
 
     def interpolationMethods(self):
         self.ui.mainGraphGraphicsView.clear(); self.ui.mainGraphGraphicsView.plot(self.TimeReadings, self.AmplitudeReadings, pen=pyqtgraph.mkPen('b', width=1.5))
@@ -170,10 +183,12 @@ class MainWindow(QMainWindow):
     def ErrorMapStartAndEndSettings(self, threadRunningValue, startAndCancelErrorMapButtonText, pauseAndResumeErrorMapButtonDisplay):
         self.threadRunning = threadRunningValue; self.ui.startAndCancelErrorMapPushButton.setText(startAndCancelErrorMapButtonText)
         self.ui.pauseAndResumeErrorMapPushButton.setEnabled(pauseAndResumeErrorMapButtonDisplay); self.ui.errorMapProgressBar.setValue(0)
+        logging.info('Error map progress bar')
 
     def ErrorMapPauseAndResumeSettings(self, threadPausedValue, mode, pauseAndResumeErrorMapButtonText):
         self.threadPaused = threadPausedValue; self.worker.pause_and_resume(mode)
         self.ui.pauseAndResumeErrorMapPushButton.setText(pauseAndResumeErrorMapButtonText)
+        logging.info('Error map pause/resume')
 
     def startThreadRunner(self):
         if not self.threadRunning:
@@ -194,6 +209,7 @@ class MainWindow(QMainWindow):
         
     def start(self):
         self.ErrorMapStartAndEndSettings(True, 'Cancel', True); self.ui.errorMapProgressBar.show()
+        logging.info('Start error map')
 
     def pauseAndResumeHandler(self):
         if not self.threadPaused: self.ErrorMapPauseAndResumeSettings(True, 'Pause', 'Resume')
@@ -217,7 +233,8 @@ class MainWindow(QMainWindow):
             self.chunkNumber, p = self.ui.latexEquationComboBox.currentIndex() + 1, self.chunkEquations(self.chunkNumber)
             degree, xSymbols = self.ui.fittingOrderSpinBox.value(), symbols("x"); poly = sum(S("{:6.2f}".format(v))*xSymbols**i for i, v in enumerate(p[::1]))
             eq_latex = printing.latex(poly); image_bytes = self.render_latex(eq_latex, fontsize=7, dpi=200, format_='png'); qp = QPixmap(); qp.loadFromData(image_bytes); self.ui.latexEquationLabel.setPixmap(qp)
-    
+        logging.info('Show interpolation equation')
+
 def GetDictionaryByTwoKeyValuePairs(dictionaries_list, first_key_to_search_by, first_value_to_search_by, second_key_to_search_by, second_value_to_search_by):
         dictionary_to_find = {}
         for dictionary in dictionaries_list:
