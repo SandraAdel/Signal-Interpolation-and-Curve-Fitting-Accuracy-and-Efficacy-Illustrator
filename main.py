@@ -1,8 +1,14 @@
-
+import logging
 import sys; from math import ceil; import numpy as np; import pandas as pd; import matplotlib.pyplot as plt; import seaborn as sns; from re import T; from io import BytesIO
 from PyQt5 import QtCore, QtWidgets; from PyQt5.QtWidgets import QApplication, QMainWindow, QMessageBox; from PyQt5.QtGui import QPixmap; from sympy import S, symbols, printing
 from scipy.interpolate import make_interp_spline; from scipy.interpolate import interp1d; from sklearn.metrics import mean_squared_error; from PyQt5.QtCore import QThreadPool
 import pyqtgraph; from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas; from GUI import Ui_MainWindow; from ErrorMapWorker import *
+
+logger = logging.getLogger()
+logger.setLevel(logging.INFO)
+logging.basicConfig(format='%(asctime)s %(levelname)-8s [%(filename)s:%(lineno)d] %(message)s',
+                    datefmt='%d-%m-%Y:%H:%M:%S',
+                    filename='Logging.txt')
 
 class MainWindow(QMainWindow):
 
@@ -14,7 +20,7 @@ class MainWindow(QMainWindow):
         # Variables Initialization
         self.TimeReadings, self.AmplitudeReadings, self.threadpool = [], [], QThreadPool()
         self.number_of_readings, self.chunkNumber, self.interpolationKind = 1000, 1, 'Polynomial'
-        self.prioritizing_constant_number_of_chunks_over_signal_interpolation_coverage, self.isMultiple, self.threadRunning, self.threadPaused = False, False, False, False
+        self.prioritizing_constant_number_of_chunks_over_signal_interpolation_coverage, self.isMultipleChunks, self.threadRunning, self.threadPaused = False, False, False, False
         self.signal_curve_fitting_coverage, self.error_map_x_axis_parameter, self.error_map_y_axis_parameter = None, None, None
         self.ui.pauseAndResumeErrorMapPushButton.setEnabled(False); self.ui.numberOfChunksSpinBox.setValue(1)
         self.showAndHideCubicSettings = [ {'UI Element': self.ui.multipleChunksRadioButton,'Function': "show"}, {'UI Element': self.ui.fitPushButton,'Function': "show"}, {'UI Element': self.ui.oneChunkRadioButton,'Function': "show"}, {'UI Element': self.ui.CurveFittingCoveragePrecentageLabel,'Function': "show"}, {'UI Element': self.ui.CurveFittingCoveragePrecentageLcdNumber,'Function': "show"}, {'UI Element': self.ui.signalCoveragePrecentageLabel,'Function': "show"}, {'UI Element': self.ui.extrapolationHorizontalSlider,'Function': "show"}, {'UI Element': self.ui.extrapolationLabel,'Function': "show"}, {'UI Element': self.ui.extrapolationPercentageLabel,'Function': "show"}, {'UI Element': self.ui.precentageOfErrorLabel,'Function': "show"},{'UI Element': self.ui.precentageOfErrorLcdNumber,'Function': "show"}, {'UI Element': self.ui.precentageLabel,'Function': "show"}, {'UI Element': self.ui.fittingOrderLabel,'Function': "hide"}, {'UI Element': self.ui.fittingOrderSpinBox,'Function': "hide"}, {'UI Element': self.ui.numberOfChunksSpinBox,'Function': "hide"}, {'UI Element': self.ui.numberOfChunksLabel,'Function': "hide"}, {'UI Element': self.ui.overlapSpinBox,'Function': "hide"}, {'UI Element': self.ui.overlapLabel,'Function': "hide"}, {'UI Element': self.ui.noOverlappingRadioButton,'Function': "hide"}, {'UI Element': self.ui.overlappingRadioButton,'Function': "hide"}, {'UI Element': self.ui.fullCoverageRadioButton,'Function': "hide"}, {'UI Element': self.ui.constantChunkRadioButton,'Function': "hide"} ]
@@ -24,10 +30,10 @@ class MainWindow(QMainWindow):
         self.errorMapComboBoxesAxesList = [ {'Current Axis Text': 'Choose Axis Parameter', 'Axis List': ["Choose Axis Parameter", "Number of Chunks", "Polynomial Order", "Overlapping Percentage"]}, {'Current Axis Text': 'Polynomial Order', 'Axis List': ["Choose Axis Parameter", "Number of Chunks", "Overlapping Percentage"]}, {'Current Axis Text': 'Number of Chunks', 'Axis List': ["Choose Axis Parameter", "Polynomial Order", "Overlapping Percentage"]}, {'Current Axis Text': 'Overlapping Percentage', 'Axis List': ["Choose Axis Parameter", "Number of Chunks", "Polynomial Order"]} ]
         self.constantParameterSettingDictionaryList = [{'X-Axis': "Number of Chunks", 'Y-Axis': "Polynomial Order", 'Constant Parameter': "Overlapping Percentage", 'Minimum': 0,'Maximum': 25,'Value': 0}, {'X-Axis': "Polynomial Order", 'Y-Axis': "Number of Chunks", 'Constant Parameter': "Overlapping Percentage", 'Minimum': 0,'Maximum': 25,'Value': 0}, {'X-Axis': "Number of Chunks", 'Y-Axis': "Overlapping Percentage", 'Constant Parameter': "Polynomial Order", 'Minimum': 0,'Maximum': 10,'Value': 0}, {'X-Axis': "Overlapping Percentage", 'Y-Axis': "Number of Chunks", 'Constant Parameter': "Polynomial Order", 'Minimum': 0,'Maximum': 10,'Value': 0}, {'X-Axis': "Polynomial Order", 'Y-Axis': "Overlapping Percentage", 'Constant Parameter': "Number of Chunks", 'Minimum': 1,'Maximum': 20,'Value': 1}, {'X-Axis': "Overlapping Percentage", 'Y-Axis': "Polynomial Order", 'Constant Parameter': "Number of Chunks", 'Minimum': 1,'Maximum': 20,'Value': 1}]
         self.spinBoxesInitializationList = [ {'One Chunk Case': True, 'Settings':[(self.ui.overlapSpinBox, 0), (self.ui.numberOfChunksSpinBox, 1)]}, {'One Chunk Case': False, 'Settings':[(self.ui.overlapSpinBox, 0), (self.ui.numberOfChunksSpinBox, 1), (self.ui.fittingOrderSpinBox, 0)]} ]
-        self.UIElementsAndFunctions = [ {'UI Element': self.ui.multipleChunksRadioButton.toggled,'Function': self.ChunksNumberRadioButtonsCheck}, {'UI Element': self.ui.oneChunkRadioButton.toggled,'Function': self.ChunksNumberRadioButtonsCheck}, {'UI Element': self.ui.polynomialRadioButton.toggled,'Function': self.interpolationMethodsRadioButton}, {'UI Element': self.ui.splineRadioButton.toggled,'Function': self.interpolationMethodsRadioButton}, {'UI Element': self.ui.overlappingRadioButton.toggled,'Function': self.OverlapRadioButtonsCheck}, {'UI Element': self.ui.noOverlappingRadioButton.toggled,'Function': self.OverlapRadioButtonsCheck}, {'UI Element': self.ui.constantChunkRadioButton.toggled,'Function': self.FullFittingCoverageAndConstantChunksNumberSettings}, {'UI Element': self.ui.cubicRadioButton.toggled,'Function': self.interpolationMethodsRadioButton}, {'UI Element': self.ui.startAndCancelErrorMapPushButton.pressed,'Function': self.startThreadRunner}, {'UI Element': self.ui.pauseAndResumeErrorMapPushButton.pressed,'Function': self.pauseAndResumeHandler}, {'UI Element': self.ui.openAction.triggered,'Function': self.OpenFile}, {'UI Element': self.ui.fitPushButton.clicked,'Function': self.interpolationMethods}, {'UI Element': self.ui.xAxisComboBox.textActivated,'Function': lambda:self.ErrorMapAxesComboBoxesSetter("X-Axis")}, {'UI Element': self.ui.yAxisComboBox.textActivated,'Function': lambda:self.ErrorMapAxesComboBoxesSetter("Y-Axis")}, {'UI Element': self.ui.extrapolationHorizontalSlider.valueChanged,'Function': self.extrapolation}, {'UI Element': self.ui.fittingOrderSpinBox.valueChanged,'Function': self.equation}, {'UI Element': self.ui.latexEquationComboBox.currentIndexChanged,'Function': self.equation}]
+        self.UIElementsAndFunctions = [ {'UI Element': self.ui.multipleChunksRadioButton.toggled,'Function': self.ChunksNumberRadioButtonsCheck}, {'UI Element': self.ui.oneChunkRadioButton.toggled,'Function': self.ChunksNumberRadioButtonsCheck}, {'UI Element': self.ui.polynomialRadioButton.toggled,'Function': self.InterpolationMethodsRadioButton}, {'UI Element': self.ui.splineRadioButton.toggled,'Function': self.InterpolationMethodsRadioButton}, {'UI Element': self.ui.overlappingRadioButton.toggled,'Function': self.OverlapRadioButtonsCheck}, {'UI Element': self.ui.noOverlappingRadioButton.toggled,'Function': self.OverlapRadioButtonsCheck}, {'UI Element': self.ui.constantChunkRadioButton.toggled,'Function': self.FullFittingCoverageAndConstantChunksNumberSettings}, {'UI Element': self.ui.cubicRadioButton.toggled,'Function': self.InterpolationMethodsRadioButton}, {'UI Element': self.ui.startAndCancelErrorMapPushButton.pressed,'Function': self.StartThreadRunner}, {'UI Element': self.ui.pauseAndResumeErrorMapPushButton.pressed,'Function': self.PauseAndResumeHandler}, {'UI Element': self.ui.openAction.triggered,'Function': self.OpenFile}, {'UI Element': self.ui.fitPushButton.clicked,'Function': self.InterpolationMethods}, {'UI Element': self.ui.xAxisComboBox.textActivated,'Function': lambda:self.ErrorMapAxesComboBoxesSetter("X-Axis")}, {'UI Element': self.ui.yAxisComboBox.textActivated,'Function': lambda:self.ErrorMapAxesComboBoxesSetter("Y-Axis")}, {'UI Element': self.ui.extrapolationHorizontalSlider.valueChanged,'Function': self.Extrapolation}, {'UI Element': self.ui.fittingOrderSpinBox.valueChanged,'Function': self.ChunkEquationCalculation}, {'UI Element': self.ui.latexEquationComboBox.currentIndexChanged,'Function': self.ChunkEquationCalculation}]
         for UIElementDictionary in self.UIElementsAndFunctions:
             UIElementDictionary['UI Element'].connect(UIElementDictionary['Function'])
-        self.ui.xAxisComboBox.setCurrentText("Number of Chunks"); self.ErrorMapAxesComboBoxesSetter("X-Axis"); self.ui.yAxisComboBox.setCurrentText("Polynomial Order"); self.ErrorMapAxesComboBoxesSetter("Y-Axis"); self.showAndHide('all')
+        self.ui.xAxisComboBox.setCurrentText("Number of Chunks"); self.ErrorMapAxesComboBoxesSetter("X-Axis"); self.ui.yAxisComboBox.setCurrentText("Polynomial Order"); self.ErrorMapAxesComboBoxesSetter("Y-Axis"); self.ShowAndHideManager('all')
 
     # Methods
     def OpenFile(self):
@@ -35,39 +41,43 @@ class MainWindow(QMainWindow):
         self.TimeReadings, self.AmplitudeReadings = self.data_frame.iloc[:,0].to_numpy(), self.data_frame.iloc[:,1].to_numpy()
         self.ui.mainGraphGraphicsView.clear(); self.ui.mainGraphGraphicsView.setYRange(min(self.AmplitudeReadings), max(self.AmplitudeReadings))
         self.ui.mainGraphGraphicsView.plot(self.TimeReadings, self.AmplitudeReadings, pen=pyqtgraph.mkPen('b', width=1.5))
+        logging.info('User opening a File')
  
-    def interpolationMethodsRadioButton(self):
+    def InterpolationMethodsRadioButton(self):
         if self.ui.polynomialRadioButton.isChecked(): self.SetInterpolationMethod('Polynomial')
         elif self.ui.splineRadioButton.isChecked(): self.SetInterpolationMethod('Spline')
         elif self.ui.cubicRadioButton.isChecked(): self.SetInterpolationMethod('Cubic')
 
     def SetInterpolationMethod(self, interpolationKind):
-        self.interpolationKind = interpolationKind; self.showAndHide(self.interpolationKind); self.setSpinBox(False)
+        self.interpolationKind = interpolationKind; self.ShowAndHideManager(self.interpolationKind); self.SetInterpolationSpinBoxes(False)
 
     def ChunksNumberRadioButtonsCheck(self):
-        if self.ui.multipleChunksRadioButton.isChecked(): self.ui.oneChunkRadioButton.show(); self.isMultiple = True; self.ShowAndHideOverlapOrChunksNumberSettings("show", self.chunksNumberSettings)
-        elif self.ui.oneChunkRadioButton.isChecked(): self.setSpinBox(True); self.isMultiple = False; self.ShowAndHideOverlapOrChunksNumberSettings("hide", self.overlapSettings); self.ShowAndHideOverlapOrChunksNumberSettings("hide", self.chunksNumberSettings)
-              
+        if self.ui.multipleChunksRadioButton.isChecked(): self.ui.oneChunkRadioButton.show(); self.isMultipleChunks = True; self.ShowAndHideOverlapOrChunksNumberSettings("show", self.chunksNumberSettings)
+        elif self.ui.oneChunkRadioButton.isChecked(): self.SetInterpolationSpinBoxes(True); self.isMultipleChunks = False; self.ShowAndHideOverlapOrChunksNumberSettings("hide", self.overlapSettings); self.ShowAndHideOverlapOrChunksNumberSettings("hide", self.chunksNumberSettings)
+        logging.info('Choosing multiple chunks')
+
     def OverlapRadioButtonsCheck(self):
         if self.ui.overlappingRadioButton.isChecked(): self.ShowAndHideOverlapOrChunksNumberSettings("show", self.overlapSettings)
         elif self.ui.noOverlappingRadioButton.isChecked(): self.ShowAndHideOverlapOrChunksNumberSettings("hide", self.overlapSettings)
+        logging.info('Choosing overlapping')
 
     def ShowAndHideOverlapOrChunksNumberSettings(self, displayMethod, overlapOrChunksNumberSettings):
         for overlapOrChunksNumberSettings in overlapOrChunksNumberSettings:
              getattr(overlapOrChunksNumberSettings, displayMethod)()
 
-    def showAndHide(self, show):
-        if show == 'Cubic': self.ShowAndHideInterpolationSettings(self.showAndHideCubicSettings)
-        elif show == 'Polynomial' or show == 'Spline': self.ShowAndHideInterpolationSettings(self.showAndHidePolynomialAndSplineSettings)
-        elif show == 'all': self.ShowAndHideInterpolationSettings(self.showAndHideAllSettings)
+    def ShowAndHideManager(self, shownInterpolationSettings):
+        if shownInterpolationSettings == 'Cubic': self.ShowAndHideInterpolationSettings(self.showAndHideCubicSettings)
+        elif shownInterpolationSettings == 'Polynomial' or shownInterpolationSettings == 'Spline': self.ShowAndHideInterpolationSettings(self.showAndHidePolynomialAndSplineSettings)
+        elif shownInterpolationSettings == 'all': self.ShowAndHideInterpolationSettings(self.showAndHideAllSettings)
 
-    def ShowAndHideInterpolationSettings(self, settingsList):
-        for Setting in settingsList:
+    def ShowAndHideInterpolationSettings(self, interpoltionSettingsList):
+        for Setting in interpoltionSettingsList:
             getattr(Setting['UI Element'], Setting['Function'])()
 
     def ErrorMapAxesComboBoxesSetter(self, axisType):
         if axisType == "X-Axis": self.ErrorMapAxesComboBoxesHelperFunction(self.ui.xAxisComboBox, self.ui.yAxisComboBox)
         elif axisType == "Y-Axis": self.ErrorMapAxesComboBoxesHelperFunction(self.ui.yAxisComboBox, self.ui.xAxisComboBox)
+        logging.info('Choosing axes for the error map')
 
     def ErrorMapAxesComboBoxesHelperFunction(self, currentAxisComboBox, otherAxisComboBox):
         otherAxisText, currentAxisText = otherAxisComboBox.currentText(), currentAxisComboBox.currentText()
@@ -83,41 +93,44 @@ class MainWindow(QMainWindow):
     def FullFittingCoverageAndConstantChunksNumberSettings(self):
         if self.ui.constantChunkRadioButton.isChecked(): messageBoxElement = QMessageBox.warning(self, 'Warning!', "Signal Curve Fitting Coverage may not be 100%.\nThis applies to Curve Fitting Functionality as well as Error Map Calculation (Polynomial Case)."); self.prioritizing_constant_number_of_chunks_over_signal_interpolation_coverage = True
         elif self.ui.fullCoverageRadioButton.isChecked(): messageBoxElement = QMessageBox.warning(self, 'Warning!', "User Input's Number of Chunks may not be kept Constant.\nThis applies to Curve Fitting Functionality as well as Error Map Calculation (Polynomial Case)."); self.prioritizing_constant_number_of_chunks_over_signal_interpolation_coverage = False
+        logging.info('Showing error messages according to overlap settings chosen')
 
-    def setSpinBox(self, one):
-        spinBoxSettings = GetDictionaryByKeyValuePair(self.spinBoxesInitializationList, 'One Chunk Case', one)
+    def SetInterpolationSpinBoxes(self, isOneChunkOptionSelected):
+        spinBoxSettings = GetDictionaryByKeyValuePair(self.spinBoxesInitializationList, 'One Chunk Case', isOneChunkOptionSelected)
         for spinBox in spinBoxSettings['Settings']:
             spinBox[0].setValue(spinBox[1])
 
-    def extrapolation(self):
+    def Extrapolation(self):
         self.extrapolationSliderValue = self.ui.extrapolationHorizontalSlider.value()
         self.ui.extrapolationPercentageLabel.setText(f'{self.extrapolationSliderValue}% Original Signal')
-        self.lastIndex= int((self.extrapolationSliderValue/100)* len(self.TimeReadings))
-        self.order, amplitude, time, residualTime, extrapolatedAmplitude = self.ui.fittingOrderSpinBox.value(), [], [], [], []
-        time, amplitude, residualTime = self.TimeReadings[0:self.lastIndex], self.AmplitudeReadings[0:self.lastIndex], self.TimeReadings[self.lastIndex:len(self.TimeReadings)]     
-        self.coeff = np.polyfit(time, amplitude,self.order); self.poly1d_fn, extrapolatedAmplitude = np.poly1d(self.coeff), np.polyval(self.coeff, residualTime)  
+        self.lastSignalIndex= int((self.extrapolationSliderValue/100)* len(self.TimeReadings))
+        self.fittingOrder, signalAmplitude, signalTime, residualTime, extrapolatedAmplitude = self.ui.fittingOrderSpinBox.value(), [], [], [], []
+        signalTime, signalAmplitude, residualTime = self.TimeReadings[0:self.lastSignalIndex], self.AmplitudeReadings[0:self.lastSignalIndex], self.TimeReadings[self.lastSignalIndex:len(self.TimeReadings)]     
+        self.equationCoefficients = np.polyfit(signalTime, signalAmplitude, self.fittingOrder); self.poly1d_fn, extrapolatedAmplitude = np.poly1d(self.equationCoefficients ), np.polyval(self.equationCoefficients , residualTime)  
         self.ui.mainGraphGraphicsView.clear(); self.ui.mainGraphGraphicsView.plot(self.TimeReadings, self.AmplitudeReadings, pen=pyqtgraph.mkPen('b', width=1.5))
-        self.ui.mainGraphGraphicsView.plot(time, self.poly1d_fn(time), pen=pyqtgraph.mkPen('g', width=1.5, style = QtCore.Qt.DotLine)); self.ui.mainGraphGraphicsView.plot(residualTime, extrapolatedAmplitude, pen=pyqtgraph.mkPen('r', width=1.5, style = QtCore.Qt.DotLine))
+        self.ui.mainGraphGraphicsView.plot(signalTime, self.poly1d_fn(signalTime), pen=pyqtgraph.mkPen('g', width=1.5, style = QtCore.Qt.DotLine)); self.ui.mainGraphGraphicsView.plot(residualTime, extrapolatedAmplitude, pen=pyqtgraph.mkPen('r', width=1.5, style = QtCore.Qt.DotLine))
+        logging.info('Using the extrapolation slider')
 
-    def clearErrorMap(self):
-        self.figure = plt.figure(figsize=(15,5)); self.axes = self.figure.get_axes()
-        self.Canvas = FigureCanvas(self.figure); self.ui.errorMapGridLayout.addWidget(self.Canvas,0, 0, 1, 1)
+    def ClearErrorMap(self):
+        self.errorMapfigure = plt.figure(figsize=(15,5)); self.errorMapAxes = self.errorMapfigure.get_axes()
+        self.Canvas = FigureCanvas(self.errorMapfigure); self.ui.errorMapGridLayout.addWidget(self.Canvas,0, 0, 1, 1)
 
-    def chunkEquations(self, chunkNumber):
-        count, self.chunckSize, self.order = 0, ceil(1000/self.ui.numberOfChunksSpinBox.value()), self.ui.fittingOrderSpinBox.value()
-        for i in range(0,len(self.TimeReadings)-1,self.chunckSize):
-            amplitude, time, increment = [], [], i; count +=1
-            for j in range(self.chunckSize-1):
-                if increment < len(self.TimeReadings): amplitude.append(self.AmplitudeReadings[increment]); time.append(self.TimeReadings[increment]); increment += 1
-            self.coeff = np.polyfit(time[0:int(self.chunckSize-1)], amplitude[0:int(self.chunckSize-1)],self.order)
-            if count == chunkNumber: return self.coeff
+    def ChunkEquations(self, chunkNumber):
+        coefficientsCount, self.chunckSize, self.fittingOrder = 0, ceil(1000/self.ui.numberOfChunksSpinBox.value()), self.ui.fittingOrderSpinBox.value()
+        for ithIncrement in range(0, len(self.TimeReadings)-1,self.chunckSize):
+            signalAmplitude, signalTime, coefficientsIncrement = [], [], ithIncrement; coefficientsCount +=1
+            for jthIncrement in range(self.chunckSize-1):
+                if coefficientsIncrement < len(self.TimeReadings): signalAmplitude.append(self.AmplitudeReadings[coefficientsIncrement]); signalTime.append(self.TimeReadings[coefficientsIncrement]); coefficientsIncrement += 1
+            self.equationCoefficients  = np.polyfit(signalTime[0:int(self.chunckSize-1)], signalAmplitude[0:int(self.chunckSize-1)],self.fittingOrder)
+            if coefficientsCount == chunkNumber: return self.equationCoefficients 
+        logging.info('Showing each chunk equation')
 
-    def interpolationMethods(self):
+    def InterpolationMethods(self):
         self.ui.mainGraphGraphicsView.clear(); self.ui.mainGraphGraphicsView.plot(self.TimeReadings, self.AmplitudeReadings, pen=pyqtgraph.mkPen('b', width=1.5))
         if self.interpolationKind == 'Polynomial':
             self.ui.latexEquationComboBox.clear()
-            for i in range(1, self.ui.numberOfChunksSpinBox.value()+1):
-                self.ui.latexEquationComboBox.addItem('Chunk '+ str(i))
+            for ithIncrement in range(1, self.ui.numberOfChunksSpinBox.value()+1):
+                self.ui.latexEquationComboBox.addItem('Chunk '+ str(ithIncrement))
         elif self.interpolationKind == 'Spline':
             if self.ui.fittingOrderSpinBox.value() % 2 == 0 and self.ui.fittingOrderSpinBox.value() != 2 : messageBoxElement = QMessageBox.warning(self, "Error!", 'Spline degree must be odd number or 2 \n Please enter an odd number'); self.ui.fittingOrderSpinBox.setValue(1)
         interpolated_curve_readings, curve_fitting_MSE = self.CurveFitFunctionality(self.ui.numberOfChunksSpinBox.value(),self.ui.overlapSpinBox.value(), self.interpolationKind, self.ui.fittingOrderSpinBox.value(), True)
@@ -134,7 +147,7 @@ class MainWindow(QMainWindow):
         self.ui.CurveFittingCoveragePrecentageLcdNumber.display(self.signal_curve_fitting_coverage)
 
     def DerivedSignalParametersCalculation(self, numberOfChuncks, percentageOfOverlapping):
-        percentageOfOverlapping, chunck_size, overlapping_range = round(percentageOfOverlapping/100, 2), round( self.number_of_readings/numberOfChuncks ), round( (self.number_of_readings/numberOfChuncks)*percentageOfOverlapping )
+        percentageOfOverlapping, chunck_size = round(percentageOfOverlapping/100, 2), round( self.number_of_readings/numberOfChuncks ); overlapping_range = round( (self.number_of_readings/numberOfChuncks)*percentageOfOverlapping )
         return chunck_size, overlapping_range
 
     def DivisionOfSignalIntoChunksWithOrWithoutOverlapping(self, numberOfChuncks, percentageOfOverlapping):
@@ -165,59 +178,59 @@ class MainWindow(QMainWindow):
         curve_fitting_MSE = mean_squared_error( self.AmplitudeReadings[:len(interpolated_curve_readings)], interpolated_curve_readings )
         return interpolated_curve_readings, curve_fitting_MSE*100
 
-    def reportProgress(self, progressValue): self.ui.errorMapProgressBar.setValue(progressValue)
+    def ReportProgress(self, progressValue): self.ui.errorMapProgressBar.setValue(progressValue)
 
     def ErrorMapStartAndEndSettings(self, threadRunningValue, startAndCancelErrorMapButtonText, pauseAndResumeErrorMapButtonDisplay):
         self.threadRunning = threadRunningValue; self.ui.startAndCancelErrorMapPushButton.setText(startAndCancelErrorMapButtonText)
         self.ui.pauseAndResumeErrorMapPushButton.setEnabled(pauseAndResumeErrorMapButtonDisplay); self.ui.errorMapProgressBar.setValue(0)
+        logging.info('Error map progress bar')
 
     def ErrorMapPauseAndResumeSettings(self, threadPausedValue, mode, pauseAndResumeErrorMapButtonText):
-        self.threadPaused = threadPausedValue; self.worker.pause_and_resume(mode)
+        self.threadPaused = threadPausedValue; self.errorMapWorker.pause_and_resume(mode)
         self.ui.pauseAndResumeErrorMapPushButton.setText(pauseAndResumeErrorMapButtonText)
 
-    def startThreadRunner(self):
+    def StartThreadRunner(self):
         if not self.threadRunning:
-            self.worker = ErrorMapWorker(self, self.ui.xAxisComboBox.currentText(), self.ui.yAxisComboBox.currentText(), self.ui.constantParameterSpinBox.value()); self.threadPaused = False
-            self.errorMapWorkerSignalSettings = [{'Signal': self.worker.ErrorMapWorkerSignals.ErrorMapProgressSignal, 'Function': self.reportProgress}, {'Signal':self.worker.ErrorMapWorkerSignals.ErrorMapStartedSignal, 'Function': self.start}, {'Signal':self.worker.ErrorMapWorkerSignals.ErrorMapFinishedSignal, 'Function': self.finish}]
+            self.errorMapWorker = ErrorMapWorker(self, self.ui.xAxisComboBox.currentText(), self.ui.yAxisComboBox.currentText(), self.ui.constantParameterSpinBox.value()); self.threadPaused = False
+            self.errorMapWorkerSignalSettings = [{'Signal': self.errorMapWorker.ErrorMapWorkerSignals.ErrorMapProgressSignal, 'Function': self.ReportProgress}, {'Signal':self.errorMapWorker.ErrorMapWorkerSignals.ErrorMapStartedSignal, 'Function': self.StartErrorMap}, {'Signal':self.errorMapWorker.ErrorMapWorkerSignals.ErrorMapFinishedSignal, 'Function': self.FinishErrorMap}]
             for errorMapWorkerSignalSetting in self.errorMapWorkerSignalSettings:
                 errorMapWorkerSignalSetting['Signal'].connect(errorMapWorkerSignalSetting['Function'])
-            self.threadpool.start(self.worker)
-        else: self.worker.stop(); self.ErrorMapStartAndEndSettings(False, 'Start', False)
+            self.threadpool.start(self.errorMapWorker)
+        else: self.errorMapWorker.stop(); self.ErrorMapStartAndEndSettings(False, 'Start', False)
 
-    def finish(self):
-        self.ErrorMapStartAndEndSettings(False, 'Start', False); self.clearErrorMap()
-        self.axes = sns.heatmap(self.worker.errors_matrix, cmap="Spectral_r")
-        self.axes.set_title("Curve Fitting Percentage Error Map"); self.axes.set_xticks(range(self.worker.x_axis_parameter_dictionary['Full Range'])); self.axes.set_yticks(range(self.worker.y_axis_parameter_dictionary['Full Range']))
-        self.axes.set_xticklabels( list( np.arange(self.worker.x_axis_parameter_dictionary['Start Range'], self.worker.x_axis_parameter_dictionary['End Range']+1 ) ) ); self.axes.set_yticklabels( list( np.arange(self.worker.y_axis_parameter_dictionary['End Range'], self.worker.y_axis_parameter_dictionary['Start Range']-1, -1 ) ) )
-        self.axes.set( xlabel = self.worker.x_axis_parameter_dictionary['Parameter Name'], ylabel = self.worker.y_axis_parameter_dictionary['Parameter Name'] ); self.Canvas.draw()
+    def FinishErrorMap(self):
+        self.ErrorMapStartAndEndSettings(False, 'Start', False); self.ClearErrorMap()
+        self.errorMapAxes = sns.heatmap(self.errorMapWorker.errors_matrix, cmap="Spectral_r")
+        self.errorMapAxes.set_title("Curve Fitting Percentage Error Map"); self.errorMapAxes.set_xticks(range(self.errorMapWorker.x_axis_parameter_dictionary['Full Range'])); self.errorMapAxes.set_yticks(range(self.errorMapWorker.y_axis_parameter_dictionary['Full Range']))
+        self.errorMapAxes.set_xticklabels( list( np.arange(self.errorMapWorker.x_axis_parameter_dictionary['Start Range'], self.errorMapWorker.x_axis_parameter_dictionary['End Range']+1 ) ) ); self.errorMapAxes.set_yticklabels( list( np.arange(self.errorMapWorker.y_axis_parameter_dictionary['End Range'], self.errorMapWorker.y_axis_parameter_dictionary['Start Range']-1, -1 ) ) )
+        self.errorMapAxes.set( xlabel = self.errorMapWorker.x_axis_parameter_dictionary['Parameter Name'], ylabel = self.errorMapWorker.y_axis_parameter_dictionary['Parameter Name'] ); self.Canvas.draw()
         errorMapSpacer = QtWidgets.QSpacerItem(550, 20, QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Minimum); self.ui.errorMapGridLayout.addItem(errorMapSpacer, 1, 0, 1, 1)
         
-    def start(self):
+    def StartErrorMap(self):
         self.ErrorMapStartAndEndSettings(True, 'Cancel', True); self.ui.errorMapProgressBar.show()
+        logging.info('Start error map')
 
-    def pauseAndResumeHandler(self):
+    def PauseAndResumeHandler(self):
         if not self.threadPaused: self.ErrorMapPauseAndResumeSettings(True, 'Pause', 'Resume')
         else: self.ErrorMapPauseAndResumeSettings(False, 'Resume', 'Pause')
 
-    def shutdown(self):
-        if self.worker: self.worker.stop()
+    def RenderLatexEquation(self, formula, fontsize=12, dpi=300, format_='svg'):
+        equationFigure = plt.figure(figsize=(0.01, 0.01)); equationFigure.text(0, 0, u'${}$'.format(formula), color='black',fontsize=fontsize)
+        buffer_ = BytesIO(); equationFigure.savefig(buffer_, dpi=dpi, transparent=True, format=format_, bbox_inches='tight', pad_inches=0.0)
+        plt.close(equationFigure); return buffer_.getvalue()
 
-    def render_latex(self,formula, fontsize=12, dpi=300, format_='svg'):
-        fig = plt.figure(figsize=(0.01, 0.01)); fig.text(0, 0, u'${}$'.format(formula), color='black',fontsize=fontsize)
-        buffer_ = BytesIO(); fig.savefig(buffer_, dpi=dpi, transparent=True, format=format_, bbox_inches='tight', pad_inches=0.0)
-        plt.close(fig); return buffer_.getvalue()
+    def ChunkEquationCalculation(self):
+        global fittingDegree
+        if self.isMultipleChunks == False:
+            fittingDegree, equationCoefficients = self.ui.fittingOrderSpinBox.value(), np.polyfit(self.TimeReadings, self.AmplitudeReadings, fittingDegree); reversedCoefficients, xSymbols = equationCoefficients[::-1], symbols("x")
+            equation_format = sum(S("{:6.2f}".format(jthCoefficient))*xSymbols**ithCoefficient for ithCoefficient, jthCoefficient in enumerate(reversedCoefficients[::1])); latex_equation = printing.latex(equation_format)     
+            image_bytes = self.RenderLatexEquation(latex_equation, fontsize=7, dpi=200, format_='png'); Qpixmap = QPixmap(); Qpixmap .loadFromData(image_bytes); self.ui.latexEquationLabel.setPixmap(Qpixmap )
+        elif self.isMultipleChunks == True:
+            self.chunkNumber, reversedCoefficients = self.ui.latexEquationComboBox.currentIndex() + 1, self.ChunkEquations(self.chunkNumber)
+            fittingDegree, xSymbols = self.ui.fittingOrderSpinBox.value(), symbols("x"); equation_format = sum(S("{:6.2f}".format(jthCoefficient))*xSymbols**ithCoefficient for ithCoefficient, jthCoefficient in enumerate(reversedCoefficients[::1]))
+            latex_equation = printing.latex(equation_format); image_bytes = self.RenderLatexEquation(latex_equation, fontsize=7, dpi=200, format_='png'); Qpixmap  = QPixmap(); Qpixmap .loadFromData(image_bytes); self.ui.latexEquationLabel.setPixmap(Qpixmap )
+        logging.info('Show interpolation equation')
         
-    def equation(self):
-        global degree
-        if self.isMultiple == False:
-            degree, coeff = self.ui.fittingOrderSpinBox.value(), np.polyfit(self.TimeReadings, self.AmplitudeReadings, degree); p, xSymbols = coeff[::-1], symbols("x")
-            poly = sum(S("{:6.2f}".format(v))*xSymbols**i for i, v in enumerate(p[::1])); eq_latex = printing.latex(poly)     
-            image_bytes = self.render_latex(eq_latex, fontsize=7, dpi=200, format_='png'); qp = QPixmap(); qp.loadFromData(image_bytes); self.ui.latexEquationLabel.setPixmap(qp)
-        elif self.isMultiple == True:
-            self.chunkNumber, p = self.ui.latexEquationComboBox.currentIndex() + 1, self.chunkEquations(self.chunkNumber)
-            degree, xSymbols = self.ui.fittingOrderSpinBox.value(), symbols("x"); poly = sum(S("{:6.2f}".format(v))*xSymbols**i for i, v in enumerate(p[::1]))
-            eq_latex = printing.latex(poly); image_bytes = self.render_latex(eq_latex, fontsize=7, dpi=200, format_='png'); qp = QPixmap(); qp.loadFromData(image_bytes); self.ui.latexEquationLabel.setPixmap(qp)
-    
 def GetDictionaryByTwoKeyValuePairs(dictionaries_list, first_key_to_search_by, first_value_to_search_by, second_key_to_search_by, second_value_to_search_by):
         dictionary_to_find = {}
         for dictionary in dictionaries_list:
