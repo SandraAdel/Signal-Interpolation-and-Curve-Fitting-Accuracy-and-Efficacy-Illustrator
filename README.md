@@ -1,4 +1,4 @@
-# Interpolation-and-Curve-Fitting
+# Signal-Interpolation-and-Curve-Fitting-Accuracy-and-Efficacy-Illustrator
 ## Desktop Application - Written in Python (pyqt5)
 - Curve fitting and interpolation are among the most usable tools in signal procesing and data science.
 - Illustrating tradeoff between order of polynomial (polynomial interpolation), number of chunks signal is divided into and overlapping percentage between chunks in terms of accuracy and efficacy.
