@@ -8,7 +8,7 @@
 - Browsing signal of 1000 samples.
 - Performing curve fitting using spline, polynomial or cubic interpolation, each with their basic settings. Shown as dotted line over original signal.
 - Controlling number of chunks signal is divided into, interpolation order, and percentage of overlapping between chunks accordingly.
-- Showing MSE of curve fitting and fitted equation of each chunk in latex format.
+- Showing mean-squared error of curve fitting and fitted equation of each chunk in latex format.
 - Generating error map for fitting process, where x and y axes are chosen out of curve fitting parameters:
 1) Polynomial interpolation order
 2) Number of chunks
